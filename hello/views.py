@@ -6,8 +6,12 @@ from .models import Greeting
 # Create your views here.
 def index(request):
     # return HttpResponse('Hello from Python!')
-    return render(request, 'index.html')
+    return render(request, 'layout-1.html')
 
+def gymsets(request):
+    # return HttpResponse('Hello from Python!')
+    txt='Page for gym sets'
+    return HttpResponse('Page for gym sets')
 
 def db(request):
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My app</title>
+  <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style type="text/css">
+
+
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top navbar-inverse">
+  <div class="container">
+    <ul class="nav navbar-nav">
+      <li class="active">
+        <a href="/"><span class="glyphicon glyphicon-home"></span> Home</a>
+      </li>
+      <li>
+        <a href="/gymsets"><span class="glyphicon glyphicon-user"></span> Gym sets</a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-info-sign"></span> Info<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a>1-a</a></li>
+            <li><a>2-a</a></li>
+            <li><a>3-a</a></li>
+            <li class="divider"></li>
+            <li><a href="#">1-b</a></li>
+          </ul>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="navbar-right">
+        <a href=""><span class="glyphicon glyphicon-book"></span> Something</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
