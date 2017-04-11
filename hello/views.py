@@ -8,7 +8,7 @@ def index(request):
     # return HttpResponse('Hello from Python!')
     return render(request, 'layout-1.html')
 
-def gymsets(request):
+def sets(request):
     # return HttpResponse('Hello from Python!')
     txt='Page for gym sets'
     return HttpResponse('Page for gym sets')
