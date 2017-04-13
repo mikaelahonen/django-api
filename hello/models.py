@@ -1,4 +1,6 @@
 from django.db import models
+#__str__()
+from django.utils.encoding import python_2_unicode_compatible
 
 # Create your models here.
 class Greeting(models.Model):
