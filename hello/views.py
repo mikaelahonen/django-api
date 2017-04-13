@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+import datetime as dt
 
 from .models import Greeting
 
@@ -10,8 +11,9 @@ def index(request):
 
 def sets(request):
     # return HttpResponse('Hello from Python!')
-    txt='Page for gym sets'
-    return HttpResponse('Page for gym sets')
+    txt='Page for gym sets <br>Now it\'s '
+    date=dt.datetime.now()
+    return HttpResponse(txt + str(date))
 
 def db(request):
 
