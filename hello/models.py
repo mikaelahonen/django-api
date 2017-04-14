@@ -9,3 +9,19 @@ class Greeting(models.Model):
 class Gym(models.Model):
     gym_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
+
+#This class must be introduced before it can be referenced
+class MuscleGroup(models.Model):
+    muscle_group = models.CharField(max_length=50)
+    
+    #Make single object to show "Chest" instead of "MuscleGroup object"
+    def __str__(self):
+        return self.muscle_group
+    
+class Excercise(models.Model):
+    excercise = models.CharField(max_length=100)
+    muscle_group = models.ForeignKey(
+        MuscleGroup,
+        on_delete = models.SET_NULL,
+        blank = True,
+        null = True,)

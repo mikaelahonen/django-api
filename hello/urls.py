@@ -10,6 +10,8 @@ from . import views
 
 urlpatterns = [
     url(r'^sets$', views.sets, name='sets'),
+    url(r'^muscle-groups$',views.muscleGroups, name="muscleGroups"),
+    url(r'^excercises$',views.excercises, name="excercises"),
     #Include function chops off the rest and sends remaining to URLconf
     #url(r'^sessions', include('gymsessions.urls'))
 ]

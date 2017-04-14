@@ -1,5 +1,5 @@
 @echo off
-set "VIRTUAL_ENV=C:\Users\Mikael Ahonen\python-getting-started\myenv"
+set "VIRTUAL_ENV=C:\Users\Mikael Ahonen\workspace\myenv"
 
 if not defined PROMPT (
     set "PROMPT=$P$G"

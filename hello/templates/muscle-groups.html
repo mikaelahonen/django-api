@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+{% load staticfiles %}
+
+{% block content %}
+  <div class="container">
+
+
+<h2>Muscle Groups</h2>
+
+
+<ul>
+
+{% for mg in mgs %}
+    <li>{{ mg.muscle_group }}</li>
+{% endfor %}
+
+</ul>
+
+</div>
+
+{% endblock %}
