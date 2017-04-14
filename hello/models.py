@@ -1,6 +1,8 @@
 from django.db import models
 #__str__()
 from django.utils.encoding import python_2_unicode_compatible
+#Create forms
+from django.forms import ModelForm
 
 # Create your models here.
 class Greeting(models.Model):
@@ -28,3 +30,17 @@ class Excercise(models.Model):
     
     def __str__(self):
         return self.excercise
+        
+class RndProgram(models.Model):
+    
+    def create():
+        return Excercise.objects.all
+        
+        
+    class Meta:
+        #Do not create a database table
+        managed = False
+        
+
+        
+    

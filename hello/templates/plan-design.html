@@ -5,12 +5,24 @@
   <div class="container">
 
 
-<h2>Excercises</h2>
+<h2>Create a training plan</h2>
 
 
 
+<h3>Session 1</h3>
 
+<h3>Session 2</h3>
+
+<h3>Session 3</h3>
+
+<h3>Session 4</h3>
+
+<p>{{var}}</p>
+
+<!--
 <table class="table">
+
+
 <tr>
 	<th>Id</th>
 	<th>Name</th>
@@ -19,14 +31,14 @@
 {% for ex in exs %}
 	
     <tr>
-		<td><a href="{% url 'gym:excercise' ex.id %}">{{ ex.id }}</a></td>
+		<td>{{ ex.id }}</td>
 		<td>{{ ex.excercise }}</td>
 		<td>{{ ex.muscle_group }}</td>
 	</tr>
 {% endfor %}
 
 </table>
-
+-->
 </div>
 
 {% endblock %}

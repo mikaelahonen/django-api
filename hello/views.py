@@ -5,6 +5,7 @@ import datetime as dt
 from .models import Greeting
 from .models import MuscleGroup
 from .models import Excercise
+from .models import RndProgram
 
 hLink="<br><a href='/'>Back to home</a>"
 
@@ -31,6 +32,13 @@ def excercises(request):
     
 def excercise(request, eId):
     return HttpResponse(eId + hLink)
+    
+def rndProgram(request):
+    var= RndProgram.create()
+    return render(request,"rnd-program.html",{"var":var})
+    
+def planDesign(request):
+    return render(request,"plan-design.html")
 
 def db(request):
 

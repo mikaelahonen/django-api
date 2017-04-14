@@ -24,9 +24,10 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 			<span class="glyphicon glyphicon-flash"></span> Gym<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/gym/sets">Sets</a></li>
-            <li><a href="/gym/excercises">Excercises</a></li>
-            <li><a href="/gym/muscle-groups">Muscle Groups</a></li>
+            <li><a href="{% url 'gym:sets' %}">Sets</a></li>
+            <li><a href="{% url 'gym:excercises' %}">Excercises</a></li>
+            <li><a href="{% url 'gym:muscleGroups' %}">Muscle Groups</a></li>
+			<li><a href="{% url 'gym:plan-design' %}">Plan</a></li>
             <li class="divider"></li>
             <li><a href="#">1-b</a></li>
           </ul>
