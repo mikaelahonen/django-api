@@ -4,6 +4,7 @@ import datetime as dt
 
 from .models import Greeting
 from .models import MuscleGroup
+from .models import Excercise
 
 hLink="<br><a href='/'>Back to home</a>"
 
@@ -25,7 +26,11 @@ def muscleGroups(request):
     
 def excercises(request):
     txt="Excercises"
-    return HttpResponse(txt+hLink)
+    exs=Excercise.objects.all()
+    return render(request,"excercises.html",{"exs":exs})
+    
+def excercise(request, eId):
+    return HttpResponse(eId + hLink)
 
 def db(request):
 
