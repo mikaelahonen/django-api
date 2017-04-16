@@ -57,7 +57,8 @@ ROOT_URLCONF = 'gettingstarted.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        #Add project folder for templates
+        'DIRS': ['gettingstarted/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'debug': True,
@@ -140,4 +141,7 @@ STATICFILES_DIRS = (
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+#Added by myself 16.4.2017
+LOGIN_REDIRECT_URL = '/'
 

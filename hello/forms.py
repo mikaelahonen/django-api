@@ -7,9 +7,7 @@ from django import forms
 from django.views.generic.edit import UpdateView 
 
 #Import models
-from .models import Plan
-from .models import Workout
-from .models import WorkoutPlan
+from .models import Plan, Workout, WorkoutPlan
 
 
 class PlanForm(forms.ModelForm):
@@ -19,16 +17,24 @@ class PlanForm(forms.ModelForm):
         #widgets = {'PlanForm': forms.TextInput(attrs={'class':'form-control'}),}
         #fields = ['name']
         #exclude = ['some_var_name']
+        
+    editAction = 'gym:planEdit'
+    addAction = 'gym:planAdd'
    
 class WorkoutForm(forms.ModelForm):
     class Meta:
         model = Workout
         fields = '__all__'
         
+    editAction = 'gym:workouts-update'
+    addAction = 'gym:workouts-add'
+        
 class WorkoutPlanForm(forms.ModelForm):
     class Meta:
         model = WorkoutPlan
         fields = '__all__'
        
+    editAction = 'gym:workoutplans-update'
+    addAction = 'gym:workoutplans-add'
 
     

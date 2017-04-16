@@ -3,25 +3,19 @@ from django.shortcuts import render
 from django.http import HttpResponse
 #from django.views.generic import TemplateView,ListView
 #from django.views.generic.edit import CreateView,UpdateView,DeleteView
-
-
 from django.db.models import Count
+from django.views import generic
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 #Python libraries
 import datetime as dt
 
 #Import models
-from .models import Greeting
-from .models import MuscleGroup
-from .models import Excercise
-from .models import Plan
-from .models import Workout
-from .models import WorkoutPlan
+from .models import Greeting, MuscleGroup, Excercise, Plan, Workout, WorkoutPlan
 
 #import forms
-from .forms import PlanForm
-from .forms import WorkoutForm
-from .forms import WorkoutPlanForm
+from .forms import PlanForm, WorkoutForm, WorkoutPlanForm
 
 hLink="<br><a href='/'>Back to home</a>"
 
@@ -78,7 +72,7 @@ def planEdit(request, plan_id):
         form.save()        
         #formData = 
         
-    return render(request,"plan-edit.html",{'plan':plan, 'form':form})
+    return render(request,"edit.html",{'obj':plan, 'form':form})
     
 def planDelete(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
@@ -95,39 +89,40 @@ def db(request):
     return render(request, 'db.html', {'greetings': greetings})
     
 class WorkoutView:
-    def all(request):
-        workouts = Workout.objects.all()
-        form = WorkoutForm()
-        return render(request,"workouts.html",{"workouts":workouts,"form":form})
-        
-    def add(request):
-    
-        if request.method=='POST':
-            formData=WorkoutForm(request.POST)
+
+        def all(request):
+            workouts = Workout.objects.all()
+            form = WorkoutForm()
+            return render(request,"workouts.html",{"workouts":workouts,"form":form})
             
-            if formData.is_valid():
-                workout = formData.save()
-                #name = form.cleaned_data['name']
-            else:
-                formData = WorkoutForm()
-        return render(request,"add.html",{'obj':workout,'request':request})
-    
-    def view(request, workout_id):
-        return HttpResponse("Show a single workout")
-    
-    def update(request, workout_id):
-        workout = Workout.objects.get(id=workout_id)
-        form = WorkoutForm(request.POST or None, instance=workout)
-        if form.is_valid():
-            form.save()        
-            #formData = 
-            
-        return render(request,"workout-edit.html",{'workout':workout, 'form':form})
+        def add(request):
         
-    def delete(request, workout_id):
-        workout = Workout.objects.get(id=workout_id)
-        workout.delete()
-        return render(request,"delete.html",{'obj':workout,'request':request})
+            if request.method=='POST':
+                formData=WorkoutForm(request.POST)
+                
+                if formData.is_valid():
+                    workout = formData.save()
+                    #name = form.cleaned_data['name']
+                else:
+                    formData = WorkoutForm()
+            return render(request,"add.html",{'obj':workout,'request':request})
+        
+        def view(request, workout_id):
+            return HttpResponse("Show a single workout")
+        
+        def update(request, workout_id):
+            workout = Workout.objects.get(id=workout_id)
+            form = WorkoutForm(request.POST or None, instance=workout)
+            if form.is_valid():
+                form.save()        
+                #formData = 
+                
+            return render(request,"edit.html",{'obj':workout, 'form':form})
+            
+        def delete(request, workout_id):
+            workout = Workout.objects.get(id=workout_id)
+            workout.delete()
+            return render(request,"delete.html",{'obj':workout,'request':request})
         
 class WorkoutPlanView:
     def all(request):

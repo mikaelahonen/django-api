@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,29 +22,47 @@
       <li>
         <a href="/"><span class="glyphicon glyphicon-user"></span> This site</a>
       </li>
-      <li class="dropdown multi-level">
+      <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 			<span class="glyphicon glyphicon-flash"></span> Gym<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="{% url 'gym:sets' %}">Sets</a></li>
-            <li><a href="{% url 'gym:excercises' %}">Excercises</a></li>
-            <li><a href="{% url 'gym:muscleGroups' %}">Muscle Groups</a></li>
+          <ul class="dropdown-menu" role="menu">                      
 			<li><a href="{% url 'gym:plansView' %}">Plans</a></li>
 			<li><a href="{% url 'gym:workouts-all' %}">Workouts</a></li>
+			<li><a href="#">Sessions</a></li>
+			<li><a href="{% url 'gym:muscleGroups' %}">Muscle Groups</a></li>
+			<li><a href="{% url 'gym:excercises' %}">Excercises</a></li>
+			<li><a href="{% url 'gym:sets' %}">Sets</a></li>
             <li class="divider"></li>
             <li><a href="#">--Other stuff--</a></li>
           </ul>
       </li>
     </ul>
+	
     <ul class="nav navbar-nav navbar-right">
-      <li class="navbar-right">
-        <a href=""><span class="glyphicon glyphicon-book"></span> Something</a>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+			<span class="glyphicon glyphicon-user"></span> User<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			{% if user.is_authenticated %}
+				<li><a href="#">{{user.get_username}}</a></li>
+				<li><a href="/logout">Logout</a></li>
+			{% else %}
+				<li><a href="/login">Login</a></li>
+			{% endif %}
+          </ul>
       </li>
     </ul>
+	
   </div>
 </nav>
 
-{% block content %}{% endblock %}
+{% if user.is_authenticated %}
+	{% block content %}{% endblock %}
+{% else %}
+	<div class="container">
+		<p>"User not authenticated"</p>
+	</div>
+{% endif %}
 
 </body>
 </html>

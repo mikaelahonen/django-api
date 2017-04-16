@@ -7,7 +7,7 @@
 
 <h2>Edit plan</h2>
 <p>You are editing object: <i>{{ obj }}</i></p>
-<form action="{% url 'gym:workoutplans-update' obj.id%}" method="post">
+<form action="{% url form.editAction obj.id%}" method="post">
 	{% csrf_token %}
 	<div class="form-group">
 	{{form.as_p}}
