@@ -41,6 +41,30 @@ class RndProgram(models.Model):
         #Do not create a database table
         managed = False
         
+class Plan(models.Model):
+    name = models.CharField(max_length = 100)
+    
+    def __str__(self):
+        return self.name
 
-        
+class Workout(models.Model):
+    TYPE_CHOICES = (
+        ('SS','Superset'), #Change between two exercises
+        ('SF','Set first'), #Execute first set from each excercise first
+        ('EF','Excercise first'), #Execute the first excercise before moving to next
+    )
+    name = models.CharField(
+        max_length = 100,
+    )
+    plan = models.ForeignKey(
+        Plan,
+        on_delete = models.SET_NULL,
+        blank = True,
+        null = True,
+    )
+    type = models.CharField(
+        choices=TYPE_CHOICES,
+        default='EF',
+        max_length=2,
+    )
     

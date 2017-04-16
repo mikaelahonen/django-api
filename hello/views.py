@@ -1,11 +1,21 @@
+#Import django libraries
 from django.shortcuts import render
 from django.http import HttpResponse
+#from django.views.generic import TemplateView,ListView
+#from django.views.generic.edit import CreateView,UpdateView,DeleteView
+#In django 1.10 this would be from django.urls import reverse
+#from django.core.urlresolvers import reverse
+
+#Python libraries
 import datetime as dt
 
+#Import models
 from .models import Greeting
 from .models import MuscleGroup
 from .models import Excercise
 from .models import RndProgram
+from .models import Plan
+from .models import Workout
 
 hLink="<br><a href='/'>Back to home</a>"
 
@@ -36,9 +46,17 @@ def excercise(request, eId):
 def rndProgram(request):
     var= RndProgram.create()
     return render(request,"rnd-program.html",{"var":var})
+  
+def plansView(request):
+    plans = Plan.objects.all()
+    return render(request,"plans.html",{"plans":plans})
     
-def planDesign(request):
-    return render(request,"plan-design.html")
+def planAdd(request, plan_id):
+    
+    return render(request,"plans.html",{"plans":plans})
+    
+def planView(request, plan_id):
+    return HttpResponse("Show a single plan")
 
 def db(request):
 

@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+{% load staticfiles %}
+
+{% block content %}
+  <div class="container">
+
+
+  
+<h1>Training Plans</h1>
+<h2>Add new</h2>
+
+<form action="{% url 'gym:planAdd' %}" method="post">
+{% csrf_token %}
+
+<label for="name">Plan name</label>
+<input type="text" name="name" id="name" value="" />
+
+<input type="submit" value="Add" />
+
+</form>
+
+<h2>Plan list</h2>
+
+<table class="table">
+<tr>
+	<th>Id</th>
+	<th>Name</th>
+</tr>
+{% for plan in plans %}
+	
+    <tr>
+		<td>{{ plan.id }}</td>
+		<td><a href="{% url 'gym:planView' plan.id %}">{{ plan.name }}</a></td>
+	</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}
