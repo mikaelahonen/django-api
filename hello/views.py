@@ -17,6 +17,9 @@ from .models import RndProgram
 from .models import Plan
 from .models import Workout
 
+#import forms
+from .forms import PlanForm
+
 hLink="<br><a href='/'>Back to home</a>"
 
 # Create your views here.
@@ -49,11 +52,21 @@ def rndProgram(request):
   
 def plansView(request):
     plans = Plan.objects.all()
-    return render(request,"plans.html",{"plans":plans})
+    form = PlanForm()
+    return render(request,"plans.html",{"plans":plans,"form":form})
     
-def planAdd(request, plan_id):
+def planAdd(request):
     
-    return render(request,"plans.html",{"plans":plans})
+    if request.method=='POST':
+        form=PlanForm(request.POST)
+        
+        if form.is_valid():
+            plan = form.save()
+            name = form.cleaned_data['name']
+        else:
+            form = PlanForm()
+    post = request
+    return render(request,"plan-add.html",{'name':name})
     
 def planView(request, plan_id):
     return HttpResponse("Show a single plan")

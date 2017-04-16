@@ -10,13 +10,11 @@
 <h2>Add new</h2>
 
 <form action="{% url 'gym:planAdd' %}" method="post">
-{% csrf_token %}
-
-<label for="name">Plan name</label>
-<input type="text" name="name" id="name" value="" />
-
-<input type="submit" value="Add" />
-
+	{% csrf_token %}
+	<div class="form-group">
+	{{form.as_p}}
+	<input type="submit" class="btn btn-success form-control" value="Add" />
+	</div>
 </form>
 
 <h2>Plan list</h2>
