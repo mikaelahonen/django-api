@@ -5,11 +5,16 @@
   <div class="container">
 
 
-
-<p>
-Training plan <i>{{ plan.name }}</i> saved successfully.
-</p> 
-<a href="/gym/plans/all">Back to all plans</a>
+<h2>Edit plan</h2>
+<p>You are editing object: <i>{{ obj }}</i></p>
+<form action="{% url 'gym:workoutplans-update' obj.id%}" method="post">
+	{% csrf_token %}
+	<div class="form-group">
+	{{form.as_p}}
+	<input type="submit" class="btn btn-success form-control" value="Update" />
+	</div>
+</form>
+<a href="{{ request.META.HTTP_REFERER }}">Go back</a>
 <!--
 <table class="table">
 

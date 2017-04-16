@@ -1,0 +1,46 @@
+{% extends "main.html" %}
+{% load staticfiles %}
+
+{% block content %}
+  <div class="container">
+
+
+  
+<h1>Workouts related to the Plan</h1>
+<b>Plan {{plan_id}} selected</b>
+<h2>Add new</h2>
+
+<form action="{% url 'gym:workoutplans-add' %}" method="post">
+	{% csrf_token %}
+	<div class="form-group">
+	{{form.as_p}}
+	<input type="submit" class="btn btn-success form-control" value="Add" />
+	</div>
+</form>
+
+<h2>Realted workouts</h2>
+
+<table class="table">
+<tr>
+	<th>Id</th>
+	<th>Plan</th>
+	<th>Workout</th>
+	<th>Delete</th>
+	<th>Edit</th>
+</tr>
+{% for workoutPlan in workoutPlans %}
+	
+    <tr>
+		<td>{{ workoutPlan.id }}</td>
+		<td>{{ workoutPlan.plan.name}}</td>
+		<td>{{ workoutPlan.workout.name}}</td>
+		<td><a href="{% url 'gym:workoutplans-delete' workoutPlan.id %}">Delete</a></td>
+		<td><a href="{% url 'gym:workoutplans-update' workoutPlan.id %}">Edit</a></td>
+	</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

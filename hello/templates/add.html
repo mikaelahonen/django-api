@@ -7,9 +7,9 @@
 
 
 <p>
-Training plan <i>{{ plan.name }}</i> saved successfully.
+Object <i>{{ obj }}</i> saved successfully.
 </p> 
-<a href="/gym/plans/all">Back to all plans</a>
+<a href="{{ request.META.HTTP_REFERER }}">Go back</a>
 <!--
 <table class="table">
 

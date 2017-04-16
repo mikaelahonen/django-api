@@ -5,10 +5,16 @@
   <div class="container">
 
 
-<h2>Random training program</h2>
-
-<p>{{var}}</p>
-
+<h2>Edit plan</h2>
+<p>You are editing plan: <i>{{ plan.name }}</i></p>
+<form action="{% url 'gym:planEdit' plan.id%}" method="post">
+	{% csrf_token %}
+	<div class="form-group">
+	{{form.as_p}}
+	<input type="submit" class="btn btn-success form-control" value="Update" />
+	</div>
+</form>
+<a href="/gym/plans/all">Back to all plans</a>
 <!--
 <table class="table">
 

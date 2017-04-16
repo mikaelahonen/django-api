@@ -23,12 +23,18 @@
 <tr>
 	<th>Id</th>
 	<th>Name</th>
+	<th>Workouts</th>
+	<th>Delete</th>
+	<th>Edit</th>
 </tr>
 {% for plan in plans %}
 	
     <tr>
 		<td>{{ plan.id }}</td>
 		<td><a href="{% url 'gym:planView' plan.id %}">{{ plan.name }}</a></td>
+		<td><a href="{% url 'gym:workoutplans-manage' plan.id %} ">{{ plan.workoutplan__count }}</a></td>
+		<td><a href="{% url 'gym:planDelete' plan.id %}">Delete</a></td>
+		<td><a href="{% url 'gym:planEdit' plan.id %}">Edit</a></td>
 	</tr>
 {% endfor %}
 

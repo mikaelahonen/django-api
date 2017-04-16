@@ -3,6 +3,8 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 #Create forms
 from django.forms import ModelForm
+#In django 1.10 this would be from django.urls import reverse
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 class Greeting(models.Model):
@@ -31,16 +33,7 @@ class Excercise(models.Model):
     def __str__(self):
         return self.excercise
         
-class RndProgram(models.Model):
-    
-    def create():
-        return Excercise.objects.all
-        
-        
-    class Meta:
-        #Do not create a database table
-        managed = False
-        
+      
 class Plan(models.Model):
     name = models.CharField(max_length = 100)
     
@@ -52,19 +45,39 @@ class Workout(models.Model):
         ('SS','Superset'), #Change between two exercises
         ('SF','Set first'), #Execute first set from each excercise first
         ('EF','Excercise first'), #Execute the first excercise before moving to next
+        ('','Excercise first'), #Execute the first excercise before moving to next
     )
     name = models.CharField(
         max_length = 100,
     )
-    plan = models.ForeignKey(
-        Plan,
-        on_delete = models.SET_NULL,
-        blank = True,
-        null = True,
-    )
+    #plan = models.ForeignKey(
+      #  Plan,
+        #on_delete = models.SET_NULL,
+        #blank = True,
+        #null = True,
+    #)
     type = models.CharField(
         choices=TYPE_CHOICES,
         default='EF',
         max_length=2,
     )
     
+    def __str__(self):
+        return self.name
+
+#Connection table between Workouts and Plans
+class WorkoutPlan(models.Model):
+    plan = models.ForeignKey(
+        Plan,
+        on_delete = models.SET_NULL,
+        blank = True,
+        null = True,
+    )
+    workout = models.ForeignKey(
+        Workout,
+        on_delete = models.SET_NULL,
+        blank = True,
+        null = True,
+    )
+    def __str__(self):
+        return self.plan.name + " -- " + self.workout.name
