@@ -3,11 +3,9 @@
     #in which case you should pass arguments forms.Form
     #and then you should define all fields just as in models
 from django import forms
-#Generic form for editing records
-from django.views.generic.edit import UpdateView 
 
 #Import models
-from .models import Plan, Workout, WorkoutPlan
+from .models import Plan, Workout, WorkoutPlan, Excercise
 
 
 class PlanForm(forms.ModelForm):
@@ -37,4 +35,8 @@ class WorkoutPlanForm(forms.ModelForm):
     editAction = 'gym:workoutplans-update'
     addAction = 'gym:workoutplans-add'
 
+class ExcerciseForm(forms.ModelForm):
+    class Meta:
+        model = Excercise
+        fields = '__all__'
     

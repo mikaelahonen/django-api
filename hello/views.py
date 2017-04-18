@@ -1,12 +1,17 @@
 #Import django libraries
 from django.shortcuts import render
 from django.http import HttpResponse
-#from django.views.generic import TemplateView,ListView
-#from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.db.models import Count
 from django.views import generic
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+
+#Generic form for editing records
+from django.views.generic import View
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView, CreateView
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 
 #Python libraries
 import datetime as dt
@@ -15,7 +20,7 @@ import datetime as dt
 from .models import Greeting, MuscleGroup, Excercise, Plan, Workout, WorkoutPlan
 
 #import forms
-from .forms import PlanForm, WorkoutForm, WorkoutPlanForm
+from .forms import PlanForm, WorkoutForm, WorkoutPlanForm, ExcerciseForm
 
 hLink="<br><a href='/'>Back to home</a>"
 
@@ -35,13 +40,41 @@ def muscleGroups(request):
     mgs=MuscleGroup.objects.all()
     return render(request,"muscle-groups.html",{'mgs': mgs})
     
-def excercises(request):
-    txt="Excercises"
-    exs=Excercise.objects.all()
-    return render(request,"excercises.html",{"exs":exs})
+"""class ExcerciseView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Hello, World!')"""
+
+class ExcerciseTemplate(TemplateView):
+
+    template_name = 'excercise.html'
     
-def excercise(request, eId):
-    return HttpResponse(eId + hLink)
+    def get_context_data(self, **kwargs):
+        context = super(ExcerciseTemplate, self).get_context_data(**kwargs)
+        return context
+        
+class ExcerciseDetail(DetailView):
+    model = Excercise
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) #argumens ExcerciseDetail, self removed from super()
+        return context
+        
+class ExcerciseList(ListView):
+    model = Excercise
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) #argumens ExcerciseDetail, self removed from super()
+        return context
+        
+class ExcerciseCreate(CreateView):
+    model = Excercise
+    fields = '__all__'
+        
+"""class ExcerciseUpdate(FormView):
+    template_name = 'excercise.html'
+    form_class = ExcerciseForm
+    success_url = '/thanks/'
+    
+    def form_valid(self, form):
+        return super(ExcerciseUpdate, self).form_valid(form)"""
   
 def plansView(request):
     plans = Plan.objects.annotate(Count('workoutplan'))
@@ -95,11 +128,9 @@ class WorkoutView:
             form = WorkoutForm()
             return render(request,"workouts.html",{"workouts":workouts,"form":form})
             
-        def add(request):
-        
+        def add(request):        
             if request.method=='POST':
-                formData=WorkoutForm(request.POST)
-                
+                formData=WorkoutForm(request.POST)                
                 if formData.is_valid():
                     workout = formData.save()
                     #name = form.cleaned_data['name']
@@ -115,8 +146,7 @@ class WorkoutView:
             form = WorkoutForm(request.POST or None, instance=workout)
             if form.is_valid():
                 form.save()        
-                #formData = 
-                
+                #formData =                 
             return render(request,"edit.html",{'obj':workout, 'form':form})
             
         def delete(request, workout_id):

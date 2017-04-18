@@ -1,4 +1,6 @@
+<!-- Load static files -->
 {% load staticfiles %}
+
 
 <!DOCTYPE html>
 <html>
@@ -16,11 +18,16 @@
 
 	<!-- Style -->
 	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<!-- Font -->
+	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 	<style type="text/css">
 	/* Remove the navbar's default margin-bottom and rounded borders */ 
 	.navbar {
 		margin-bottom: 0;
 		border-radius: 0;
+	}
+	body, html{
+		font-family: 'Oswald', sans-serif;
 	}
 	</style>
 	
@@ -54,7 +61,7 @@
 				<li><a href="{% url 'gym:workouts-all' %}">Workouts</a></li>
 				<li><a href="#">Sessions</a></li>
 				<li><a href="{% url 'gym:muscleGroups' %}">Muscle Groups</a></li>
-				<li><a href="{% url 'gym:excercises' %}">Excercises</a></li>
+				<li><a href="{% url 'gym:excercise-list' %}">Excercises</a></li>
 				<li><a href="{% url 'gym:sets' %}">Sets</a></li>
 				<li class="divider"></li>
 				<li><a href="#">--Other stuff--</a></li>
@@ -80,15 +87,18 @@
   </div> <!-- End container fluid -->
 </nav>
 
-{% if user.is_authenticated %}
-	{% block content %}{% endblock %}
-{% else %}
-	<div class="container">
+<div class="container">
 		<div class="row">
-			<p>"User not authenticated"</p>
-		</div>
+		
+			{% if user.is_authenticated %}
+				{% block content %}{% endblock %}
+			{% else %}				
+				<p>"User not authenticated"</p>
+			{% endif %}
+
 	</div>
-{% endif %}
+</div>
 
 </body>
+
 </html>

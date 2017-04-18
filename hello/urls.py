@@ -3,6 +3,7 @@ from django.conf.urls import include, url
 #admin.autodiscover()
 
 from . import views
+from hello.views import ExcerciseTemplate, ExcerciseDetail, ExcerciseList, ExcerciseCreate #ExcerciseView, 
 
 # Examples:
 # url(r'^$', 'gettingstarted.views.home', name='home'),
@@ -12,6 +13,7 @@ from . import views
 app_name = 'gym'
 
 #constants
+pk = '(?P<pk>[0-9]+)'
 plan_id = '(?P<plan_id>[0-9]+)'
 workout_id = '(?P<workout_id>[0-9]+)'
 workoutplan_id = '(?P<workoutplan_id>[0-9]+)'
@@ -20,8 +22,15 @@ workoutplan_id = '(?P<workoutplan_id>[0-9]+)'
 urlpatterns = [
     url(r'^sets$', views.sets, name='sets'),
     url(r'^muscle-groups$',views.muscleGroups, name="muscleGroups"),
-    url(r'^excercises$',views.excercises, name="excercises"),
-    url(r'^excercise/(?P<eId>[0-9]+)$',views.excercise, name="excercise"),
+    
+    #url(r'^excercises$',views.excercises, name="excercises"),
+    #url(r'^excercise/', ExcerciseView.as_view(), name='excercise-view'),
+    #Template class
+    #url(r'^$', ExcerciseTemplate.as_view(), name='excercise-template'),
+    #Detail view
+    url(r'^excercise/'+pk+'/$',ExcerciseDetail.as_view(),name='excercise-detail'),
+    url(r'^excercise/$',ExcerciseList.as_view(),name='excercise-list'),
+    url(r'^excercise/create$',ExcerciseCreate.as_view(),name='excercise-create'),
     
     #Workout
     url(r'^workouts/all$',views.WorkoutView.all, name="workouts-all"),

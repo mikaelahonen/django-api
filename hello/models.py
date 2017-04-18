@@ -1,10 +1,10 @@
-from django.db import models
 #__str__()
 from django.utils.encoding import python_2_unicode_compatible
 #Create forms
 from django.forms import ModelForm
 #In django 1.10 this would be from django.urls import reverse
 from django.core.urlresolvers import reverse
+from django.db import models
 
 # Create your models here.
 class Greeting(models.Model):
@@ -29,9 +29,22 @@ class Excercise(models.Model):
         on_delete = models.SET_NULL,
         blank = True,
         null = True,)
+    #Distance from movement axis in meters
+    lever = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        null=True)
+    #Portion of body mass moving in the excercise  
+    mass_share = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True)
     
     def __str__(self):
         return self.excercise
+    
+    def get_absolute_url(self):
+        return reverse('excercise-detail', kwargs={'pk': self.pk})
         
       
 class Plan(models.Model):
