@@ -1,5 +1,5 @@
 #Import django libraries
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Count
 from django.views import generic
@@ -27,7 +27,7 @@ hLink="<br><a href='/'>Back to home</a>"
 # Create your views here.
 def index(request):
     # return HttpResponse('Hello from Python!')
-    return render(request, 'main.html')
+    return render(request, 'home.html')
 
 def sets(request):
     # return HttpResponse('Hello from Python!')
@@ -44,37 +44,35 @@ def muscleGroups(request):
     def get(self, request, *args, **kwargs):
         return HttpResponse('Hello, World!')"""
 
-class ExcerciseTemplate(TemplateView):
-
-    template_name = 'excercise.html'
+      
+   
+#EXCERCISES
+def excerciseList(request):
+    objs = Excercise.objects.order_by('-id')
+    form = ExcerciseForm()               
+    return render(request,"excercise.html",{"form":form,"objs":objs})
     
-    def get_context_data(self, **kwargs):
-        context = super(ExcerciseTemplate, self).get_context_data(**kwargs)
-        return context
-        
-class ExcerciseDetail(DetailView):
-    model = Excercise
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) #argumens ExcerciseDetail, self removed from super()
-        return context
-        
-class ExcerciseList(ListView):
-    model = Excercise
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) #argumens ExcerciseDetail, self removed from super()
-        return context
-        
-class ExcerciseCreate(CreateView):
-    model = Excercise
-    fields = '__all__'
-        
-"""class ExcerciseUpdate(FormView):
-    template_name = 'excercise.html'
-    form_class = ExcerciseForm
-    success_url = '/thanks/'
+def excerciseDelete(request, pk):
+    obj = Excercise.objects.get(id=pk)
+    obj.delete()
+    return redirect('gym:excercise-list')
     
-    def form_valid(self, form):
-        return super(ExcerciseUpdate, self).form_valid(form)"""
+def excerciseCreate(request):
+    if request.method=='POST':
+        formData=ExcerciseForm(request.POST)            
+        if formData.is_valid():
+            excercise = formData.save()
+        else:
+            formData = ExcerciseForm()
+    return redirect('gym:excercise-list')
+    #return render(request,"add.html",{'obj':excercise,'request':request})
+    
+def excerciseUpdate(request, pk):
+    obj = Excercise.objects.get(id=pk)
+    form = ExcerciseForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()        
+    return render(request,"update.html",{'obj':obj, 'form':form})
   
 def plansView(request):
     plans = Plan.objects.annotate(Count('workoutplan'))
@@ -105,7 +103,7 @@ def planEdit(request, plan_id):
         form.save()        
         #formData = 
         
-    return render(request,"edit.html",{'obj':plan, 'form':form})
+    return render(request,"update.html",{'obj':plan, 'form':form})
     
 def planDelete(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
@@ -121,38 +119,41 @@ def db(request):
 
     return render(request, 'db.html', {'greetings': greetings})
     
-class WorkoutView:
+    
+    
+    
+#WORKOUT
 
-        def all(request):
-            workouts = Workout.objects.all()
-            form = WorkoutForm()
-            return render(request,"workouts.html",{"workouts":workouts,"form":form})
+def workoutList(request):
+    objs = Workout.objects.all()
+    form = WorkoutForm()
+    return render(request,"workout.html",{"objs":objs,"form":form})
             
-        def add(request):        
-            if request.method=='POST':
-                formData=WorkoutForm(request.POST)                
-                if formData.is_valid():
-                    workout = formData.save()
-                    #name = form.cleaned_data['name']
-                else:
-                    formData = WorkoutForm()
-            return render(request,"add.html",{'obj':workout,'request':request})
+def workoutCreate(request):        
+    if request.method=='POST':
+        formData=WorkoutForm(request.POST)                
+        if formData.is_valid():
+            obj = formData.save()
+            #name = form.cleaned_data['name']
+        else:
+            formData = WorkoutForm()
+    return redirect('gym:workout-list')
         
-        def view(request, workout_id):
-            return HttpResponse("Show a single workout")
+def workoutDetail(request, pk):
+    return HttpResponse("Show a single workout")
         
-        def update(request, workout_id):
-            workout = Workout.objects.get(id=workout_id)
-            form = WorkoutForm(request.POST or None, instance=workout)
-            if form.is_valid():
-                form.save()        
-                #formData =                 
-            return render(request,"edit.html",{'obj':workout, 'form':form})
+def workoutUpdate(request, pk):
+    obj = Workout.objects.get(id=pk)
+    form = WorkoutForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()        
+        #formData =                 
+    return render(request,"update.html",{'obj':obj, 'form':form})
             
-        def delete(request, workout_id):
-            workout = Workout.objects.get(id=workout_id)
-            workout.delete()
-            return render(request,"delete.html",{'obj':workout,'request':request})
+def workoutDelete(request, pk):
+    obj = Workout.objects.get(id=pk)
+    obj.delete()
+    return redirect('gym:workout-list')
         
 class WorkoutPlanView:
     def all(request):
@@ -184,7 +185,7 @@ class WorkoutPlanView:
             form.save()        
             #formData = 
             
-        return render(request,"edit.html",{'obj':workoutPlan, 'form':form,'request':request})
+        return render(request,"update.html",{'obj':workoutPlan, 'form':form,'request':request})
         
     def delete(request, workoutplan_id):
         workoutPlan = WorkoutPlan.objects.get(id=workoutplan_id)

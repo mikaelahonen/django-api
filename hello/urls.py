@@ -2,8 +2,7 @@ from django.conf.urls import include, url
 #from django.contrib import admin
 #admin.autodiscover()
 
-from . import views
-from hello.views import ExcerciseTemplate, ExcerciseDetail, ExcerciseList, ExcerciseCreate #ExcerciseView, 
+from . import views as v
 
 # Examples:
 # url(r'^$', 'gettingstarted.views.home', name='home'),
@@ -20,39 +19,37 @@ workoutplan_id = '(?P<workoutplan_id>[0-9]+)'
 
 #URL patterns
 urlpatterns = [
-    url(r'^sets$', views.sets, name='sets'),
-    url(r'^muscle-groups$',views.muscleGroups, name="muscleGroups"),
+    url(r'^sets$', v.sets, name='sets'),
+    url(r'^muscle-groups$',v.muscleGroups, name="muscleGroups"),
     
-    #url(r'^excercises$',views.excercises, name="excercises"),
-    #url(r'^excercise/', ExcerciseView.as_view(), name='excercise-view'),
-    #Template class
-    #url(r'^$', ExcerciseTemplate.as_view(), name='excercise-template'),
-    #Detail view
-    url(r'^excercise/'+pk+'/$',ExcerciseDetail.as_view(),name='excercise-detail'),
-    url(r'^excercise/$',ExcerciseList.as_view(),name='excercise-list'),
-    url(r'^excercise/create$',ExcerciseCreate.as_view(),name='excercise-create'),
+    #Excercise
+    #url(r'^excercise/'+pk+'/$',ExcerciseView.detail,name='excercise-detail'),
+    url(r'^excercise/$',v.excerciseList,name='excercise-list'),
+    url(r'^excercise/create$',v.excerciseCreate,name='excercise-create'),
+    url(r'^excercise/'+pk+'/delete$',v.excerciseDelete,name='excercise-delete'),
+    url(r'^excercise/'+pk+'/update$',v.excerciseUpdate,name='excercise-update'),
     
     #Workout
-    url(r'^workouts/all$',views.WorkoutView.all, name="workouts-all"),
-    url(r'^workouts/add$',views.WorkoutView.add, name="workouts-add"),
-    url(r'^workouts/'+workout_id+'/delete$',views.WorkoutView.delete, name="workouts-delete"),
-    url(r'^workouts/'+workout_id+'/edit$',views.WorkoutView.update, name="workouts-update"),
-    url(r'^workouts/'+workout_id+'$',views.WorkoutView.view, name="workouts-view"),
+    url(r'^workout/$',v.workoutList, name="workout-list"),
+    url(r'^workout/create$',v.workoutCreate, name="workout-create"),
+    url(r'^workout/'+pk+'/delete$',v.workoutDelete, name="workout-delete"),
+    url(r'^workout/'+pk+'/update$',v.workoutUpdate, name="workout-update"),
+    #url(r'^workouts/'+workout_id+'$',v.WorkoutView.view, name="workout-detail"),
     
     #WorkoutPlan
-    url(r'^workoutplans/all$',views.WorkoutPlanView.all, name="workoutplans-all"),
-    url(r'^workoutplans/add$',views.WorkoutPlanView.add, name="workoutplans-add"),
-    url(r'^workoutplans/'+workoutplan_id+'/delete$',views.WorkoutPlanView.delete, name="workoutplans-delete"),
-    url(r'^workoutplans/'+workoutplan_id+'/edit$',views.WorkoutPlanView.update, name="workoutplans-update"),
-    #url(r'^workoutplans/'+workoutplan_id+'$',views.WorkoutPlanView.view, name="workoutplans-view"),
-    url(r'^workoutplans/'+plan_id+'/manage$',views.WorkoutPlanView.manage, name="workoutplans-manage"),
+    url(r'^workoutplans/all$',v.WorkoutPlanView.all, name="workoutplans-all"),
+    url(r'^workoutplans/add$',v.WorkoutPlanView.add, name="workoutplans-add"),
+    url(r'^workoutplans/'+workoutplan_id+'/delete$',v.WorkoutPlanView.delete, name="workoutplans-delete"),
+    url(r'^workoutplans/'+workoutplan_id+'/edit$',v.WorkoutPlanView.update, name="workoutplans-update"),
+    #url(r'^workoutplans/'+workoutplan_id+'$',v.WorkoutPlanView.view, name="workoutplans-view"),
+    url(r'^workoutplans/'+plan_id+'/manage$',v.WorkoutPlanView.manage, name="workoutplans-manage"),
     
     #Plans
-    url(r'^plans/all$',views.plansView, name="plansView"),
-    url(r'^plans/add$',views.planAdd, name="planAdd"),
-    url(r'^plans/'+plan_id+'/delete$',views.planDelete, name="planDelete"),
-    url(r'^plans/'+plan_id+'/edit$',views.planEdit, name="planEdit"),
-    url(r'^plans/'+plan_id+'$',views.planView, name="planView"),
+    url(r'^plans/all$',v.plansView, name="plansView"),
+    url(r'^plans/add$',v.planAdd, name="planAdd"),
+    url(r'^plans/'+plan_id+'/delete$',v.planDelete, name="planDelete"),
+    url(r'^plans/'+plan_id+'/edit$',v.planEdit, name="planEdit"),
+    url(r'^plans/'+plan_id+'$',v.planView, name="planView"),
     #Include function chops off the rest and sends remaining to URLconf
     #url(r'^sessions', include('gymsessions.urls'))
 ]

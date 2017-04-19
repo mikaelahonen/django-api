@@ -24,8 +24,8 @@ class WorkoutForm(forms.ModelForm):
         model = Workout
         fields = '__all__'
         
-    editAction = 'gym:workouts-update'
-    addAction = 'gym:workouts-add'
+    editAction = 'gym:workout-update'
+    addAction = 'gym:workout-create'
         
 class WorkoutPlanForm(forms.ModelForm):
     class Meta:
@@ -39,4 +39,6 @@ class ExcerciseForm(forms.ModelForm):
     class Meta:
         model = Excercise
         fields = '__all__'
-    
+        
+    editAction = 'gym:excercise-update'
+    addAction = 'gym:excercise-create'

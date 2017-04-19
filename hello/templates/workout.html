@@ -5,14 +5,14 @@
 <!-- Loads django-bootstrap-form-->
 {% load bootstrap %}
 
-<h1>Excercises</h1>
+<h1>Workout</h1>
 <legend></legend>
 
 <div class="col-sm-4">
 	<h2>Create</h2>
 	
 	<div class="form">
-		<form class="form-group" action="{% url 'gym:excercise-create' %}" method="post">{% csrf_token %}
+		<form class="form-group" action="{% url 'gym:workout-create' %}" method="post">{% csrf_token %}
 		{{form|bootstrap}}	
 		<input type="submit" class="btn btn-success" value="Add" />
 		</form>
@@ -27,7 +27,7 @@
 		<tr>
 			<th>Id</th>
 			<th>Name</th>
-			<th>Muscle Group</th>
+			<th>Type</th>
 			<th></th>
 			<th></th>
 		</tr>
@@ -35,10 +35,10 @@
 	{% for obj in objs %}
 		<tr>
 		<td>{{obj.id}}</td>
-		<td>{{obj.excercise}}</td>
-		<td>{{obj.muscle_group}}</td>
-		<td><a  class='btn btn-danger' href="{% url 'gym:excercise-delete' obj.id %}">Delete</a></td>
-		<td><a  class='btn btn-primary' href="{% url 'gym:excercise-update' obj.id %}">Update</a></td>
+		<td>{{obj.name}}</td>
+		<td>{{obj.type}}</td>
+		<td><a  class='btn btn-danger' href="{% url 'gym:workout-delete' obj.id %}">Delete</a></td>
+		<td><a  class='btn btn-primary' href="{% url 'gym:workout-update' obj.id %}">Update</a></td>
 		</tr>
 	{% empty %}
 		<p>No Excercises yet.</p>

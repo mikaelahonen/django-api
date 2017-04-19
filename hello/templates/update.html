@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+{% load bootstrap %}
+{% block content %}
+
+<div class="col-sm-8">
+	<h2>Update object</h2>
+	<p>You are editing object: <i>{{ obj }}</i></p>
+	<form action="{% url form.editAction obj.id%}" method="post">
+		{% csrf_token %}
+		<div class="form-group">
+		{{form|bootstrap}}
+		<input type="submit" class="btn btn-primary form-control" value="Update" />
+		</div>
+	</form>
+</div>
+
+{% endblock %}
