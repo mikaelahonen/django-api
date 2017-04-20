@@ -9,7 +9,7 @@
 <h1>Training Plans</h1>
 <h2>Add new</h2>
 
-<form action="{% url 'gym:planAdd' %}" method="post">
+<form action="{% url 'gym:plan-create' %}" method="post">
 	{% csrf_token %}
 	<div class="form-group">
 	{{form.as_p}}
@@ -31,10 +31,10 @@
 	
     <tr>
 		<td>{{ plan.id }}</td>
-		<td><a href="{% url 'gym:planView' plan.id %}">{{ plan.name }}</a></td>
-		<td><a href="{% url 'gym:workoutplans-manage' plan.id %} ">{{ plan.workoutplan__count }}</a></td>
-		<td><a href="{% url 'gym:planDelete' plan.id %}">Delete</a></td>
-		<td><a href="{% url 'gym:planEdit' plan.id %}">Edit</a></td>
+		<td><a href="{% url 'gym:plan-detail' plan.id %}">{{ plan.name }}</a></td>
+		<td><a href="{% url 'gym:workoutplan-manage' plan.id %} ">{{ plan.workoutplan__count }}</a></td>
+		<td><a href="{% url 'gym:plan-delete' plan.id %}">Delete</a></td>
+		<td><a href="{% url 'gym:plan-update' plan.id %}">Edit</a></td>
 	</tr>
 {% endfor %}
 

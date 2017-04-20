@@ -16,8 +16,8 @@ class PlanForm(forms.ModelForm):
         #fields = ['name']
         #exclude = ['some_var_name']
         
-    editAction = 'gym:planEdit'
-    addAction = 'gym:planAdd'
+    editAction = 'gym:plan-update'
+    addAction = 'gym:plan-create'
    
 class WorkoutForm(forms.ModelForm):
     class Meta:
@@ -33,7 +33,7 @@ class WorkoutPlanForm(forms.ModelForm):
         fields = '__all__'
        
     editAction = 'gym:workoutplans-update'
-    addAction = 'gym:workoutplans-add'
+    addAction = 'gym:workoutplans-create'
 
 class ExcerciseForm(forms.ModelForm):
     class Meta:

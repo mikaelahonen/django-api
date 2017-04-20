@@ -7,10 +7,10 @@
 
   
 <h1>Workouts related to the Plan</h1>
-<b>Plan {{plan_id}} selected</b>
+<b>Plan {{pk}} selected</b>
 <h2>Add new</h2>
 
-<form action="{% url 'gym:workoutplans-add' %}" method="post">
+<form action="{% url 'gym:workoutplan-create' %}" method="post">
 	{% csrf_token %}
 	<div class="form-group">
 	{{form.as_p}}
@@ -34,8 +34,8 @@
 		<td>{{ workoutPlan.id }}</td>
 		<td>{{ workoutPlan.plan.name}}</td>
 		<td>{{ workoutPlan.workout.name}}</td>
-		<td><a href="{% url 'gym:workoutplans-delete' workoutPlan.id %}">Delete</a></td>
-		<td><a href="{% url 'gym:workoutplans-update' workoutPlan.id %}">Edit</a></td>
+		<td><a href="{% url 'gym:workoutplan-delete' workoutPlan.id %}">Delete</a></td>
+		<td><a href="{% url 'gym:workoutplan-update' workoutPlan.id %}">Edit</a></td>
 	</tr>
 {% endfor %}
 
