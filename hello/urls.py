@@ -13,9 +13,7 @@ app_name = 'gym'
 
 #constants
 pk = '(?P<pk>[0-9]+)'
-plan_id = '(?P<plan_id>[0-9]+)'
-workout_id = '(?P<workout_id>[0-9]+)'
-workoutplan_id = '(?P<workoutplan_id>[0-9]+)'
+pk2 = '(?P<pk2>[0-9]+)'
 
 #URL patterns
 urlpatterns = [
@@ -41,6 +39,7 @@ urlpatterns = [
     url(r'^workout/create$',v.workoutCreate, name="workout-create"),
     url(r'^workout/'+pk+'/delete$',v.workoutDelete, name="workout-delete"),
     url(r'^workout/'+pk+'/update$',v.workoutUpdate, name="workout-update"),
+    url(r'^workout/'+pk+'/section$',v.workoutSection, name="workout-section"),
     #url(r'^workouts/'+workout_id+'$',v.WorkoutView.view, name="workout-detail"),
     
     #WorkoutPlan
@@ -51,6 +50,16 @@ urlpatterns = [
     #url(r'^workoutplans/'+workoutplan_id+'$',v.WorkoutPlanView.view, name="workoutplans-view"),
     url(r'^workoutplan/'+pk+'/manage$',v.workoutPlanManage, name="workoutplan-manage"),
     
+    #Section
+    url(r'^section/$',v.sectionList, name="section-list"),
+    #Here pk is the workout primary key
+    url(r'^section/create/'+pk+'$',v.sectionCreate, name="section-create"),
+    url(r'^section/'+pk+'/delete/'+pk2+'$',v.sectionDelete, name="section-delete"),
+    url(r'^section/'+pk+'/update$',v.sectionUpdate, name="section-update"),
+    #url(r'^workout/create$',v.workoutCreate, name="workout-create"),
+    #url(r'^workout/'+pk+'/delete$',v.workoutDelete, name="workout-delete"),
+    #url(r'^workout/'+pk+'/update$',v.workoutUpdate, name="workout-update"),
+    #url(r'^workouts/'+workout_id+'$',v.WorkoutView.view, name="workout-detail"),
     
     #Include function chops off the rest and sends remaining to URLconf
     #url(r'^sessions', include('gymsessions.urls'))

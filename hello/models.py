@@ -78,6 +78,19 @@ class Workout(models.Model):
     def __str__(self):
         return self.name
 
+class Section(models.Model):
+    index = models.IntegerField(
+        default = 1,
+    )
+    excercise = models.ForeignKey(
+        Excercise,
+        on_delete = models.CASCADE
+    )
+    workout = models.ForeignKey(
+        Workout,
+        on_delete = models.CASCADE
+    )
+     
 #Connection table between Workouts and Plans
 class WorkoutPlan(models.Model):
     plan = models.ForeignKey(
@@ -94,3 +107,7 @@ class WorkoutPlan(models.Model):
     )
     def __str__(self):
         return self.plan.name + " -- " + self.workout.name
+        
+
+    
+    

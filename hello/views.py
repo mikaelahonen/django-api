@@ -18,10 +18,10 @@ from django.views.generic.list import ListView
 import datetime as dt
 
 #Import models
-from .models import Greeting, MuscleGroup, Excercise, Plan, Workout, WorkoutPlan
+from .models import Greeting, MuscleGroup, Excercise, Plan, Workout, WorkoutPlan, Section
 
 #import forms
-from .forms import PlanForm, WorkoutForm, WorkoutPlanForm, ExcerciseForm
+from .forms import PlanForm, WorkoutForm, WorkoutPlanForm, ExcerciseForm, SectionForm
 
 hLink="<br><a href='/'>Back to home</a>"
 
@@ -146,7 +146,6 @@ def workoutCreate(request):
         formData=WorkoutForm(request.POST)                
         if formData.is_valid():
             obj = formData.save()
-            #name = form.cleaned_data['name']
         else:
             formData = WorkoutForm()
     return redirect('gym:workout-list')
@@ -170,8 +169,12 @@ def workoutDelete(request, pk):
     obj.delete()
     return redirect('gym:workout-list')
 
-    
-    
+@login_required
+def workoutSection(request, pk):
+    workout = Workout.objects.get(id=pk)
+    objs = Section.objects.filter(workout=pk)
+    form = SectionForm()
+    return render(request,"workout-section.html",{"objs":objs,"form":form,"workout":workout})
     
 #WORKOUT-PLAN
 @login_required    
@@ -200,16 +203,47 @@ def workoutPlanManage(request, pk):
     return render(request,"workoutplan-manage.html",{"workoutPlans":workoutPlans,"form":form,"pk":pk})
 
 def workoutPlanUpdate(request, workoutpk):
-    workoutPlan = WorkoutPlan.objects.get(id=workoutpk)
-    form = WorkoutPlanForm(request.POST or None, instance=workoutPlan)
+    obj = WorkoutPlan.objects.get(id=workoutpk)
+    form = WorkoutPlanForm(request.POST or None, instance=obj)
     if form.is_valid():
-        form.save()        
-        #formData = 
-        
+        form.save() 
     return render(request,"update.html",{'obj':workoutPlan, 'form':form,'request':request})
     
-def workoutPlanDelete(request, workoutpk):
-    workoutPlan = WorkoutPlan.objects.get(id=workoutpk)
+def workoutPlanDelete(request, pk):
+    workoutPlan = WorkoutPlan.objects.get(id=pk)
     workoutPlan.delete()
     return render(request,"delete.html",{'obj':workoutPlan,'request':request})
+    
 
+    
+    
+#SECTION
+@login_required
+def sectionList(request):
+    objs = Section.objects.all()
+    form = SectionForm()
+    return render(request,"section.html",{"objs":objs,"form":form})
+    
+@login_required
+def sectionCreate(request,pk):        
+    if request.method=='POST':
+        formData=SectionForm(request.POST)                
+        if formData.is_valid():
+            obj = formData.save()
+        else:
+            formData = SectionForm()
+    return redirect('gym:workout-section', pk=obj.workout.id)
+
+@login_required  
+def sectionDelete(request, pk, pk2):
+    obj = Section.objects.get(id=pk)
+    obj.delete()
+    return redirect('gym:workout-section', pk=pk2)
+
+@login_required    
+def sectionUpdate(request, pk):
+    obj = Section.objects.get(id=pk)
+    form = SectionForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()                         
+    return render(request,"update.html",{'obj':obj, 'form':form})
