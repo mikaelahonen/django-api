@@ -180,10 +180,18 @@ def routineDetail(request, pk):
 def routineUpdate(request, pk):
     obj = Routine.objects.get(id=pk)
     form = RoutineForm(request.POST or None, instance=obj)
-    if form.is_valid():
-        form.save()        
-        #formData =                 
-    return render(request,"update.html",{'obj':obj, 'form':form})
+    if request.method=='POST':
+        if form.is_valid():
+            form.save()                       
+        return redirect('gym:routine-list')
+    else:
+        context = {
+            'obj': obj,
+            'form': form,
+            'request': request,
+        }
+        return render(request,"update.html",context)
+        
 
 @login_required    
 def routineDelete(request, pk):
