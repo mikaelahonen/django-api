@@ -53,16 +53,15 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    #'gettingstarted.middleware.LoginRequiredMiddleware',
 )
 
-ROOT_URLCONF = 'gettingstarted.urls'
+ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         #Add project folder for templates
-        'DIRS': ['gettingstarted/templates'],
+        'DIRS': ['project/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'debug': True,
@@ -76,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gettingstarted.wsgi.application'
+WSGI_APPLICATION = 'project.wsgi.application'
 
 
 # Database
