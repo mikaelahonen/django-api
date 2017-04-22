@@ -5,14 +5,11 @@
 <!-- Loads django-bootstrap-form-->
 {% load bootstrap %}
 
-<h1>Workout</h1>
-<legend></legend>
-
 <div class="col-sm-4">
 	<h2>Create</h2>
 	
 	<div class="form">
-		<form class="form-group" action="{% url 'gym:workout-create' %}" method="post">{% csrf_token %}
+		<form class="form-group" action="{% url 'gym:routine-create' %}" method="post">{% csrf_token %}
 		{{form|bootstrap}}	
 		<input type="submit" class="btn btn-success" value="Add" />
 		</form>
@@ -35,10 +32,10 @@
 	{% for obj in objs %}
 		<tr>
 		<td>{{obj.id}}</td>
-		<td><a href="{% url 'gym:workout-section' obj.id %}">{{obj.name}}</a></td>
+		<td><a href="{% url 'gym:routine-section' obj.id %}">{{obj.name}}</a></td>
 		<td>{{obj.type}}</td>
-		<td><a  class='btn btn-danger' href="{% url 'gym:workout-delete' obj.id %}">Delete</a></td>
-		<td><a  class='btn btn-primary' href="{% url 'gym:workout-update' obj.id %}">Update</a></td>
+		<td><a  class='btn btn-danger' href="{% url 'gym:routine-delete' obj.id %}">Delete</a></td>
+		<td><a  class='btn btn-primary' href="{% url 'gym:routine-update' obj.id %}">Update</a></td>
 		</tr>
 	{% empty %}
 		<p>No Excercises yet.</p>

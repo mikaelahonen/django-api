@@ -53,7 +53,7 @@ class Plan(models.Model):
     def __str__(self):
         return self.name
 
-class Workout(models.Model):
+class Routine(models.Model):
     TYPE_CHOICES = (
         ('SS','Superset'), #Change between two exercises
         ('SF','Set first'), #Execute first set from each excercise first
@@ -86,12 +86,20 @@ class Section(models.Model):
         Excercise,
         on_delete = models.CASCADE
     )
-    workout = models.ForeignKey(
-        Workout,
+    #How many sets to do
+    sets = models.IntegerField(
+        default = 4,
+    )
+    #Target repetitions
+    target = models.IntegerField(
+        default = 10,
+    )
+    routine = models.ForeignKey(
+        Routine,
         on_delete = models.CASCADE
     )
      
-#Connection table between Workouts and Plans
+#Connection table between Routines and Plans
 class WorkoutPlan(models.Model):
     plan = models.ForeignKey(
         Plan,
@@ -99,14 +107,14 @@ class WorkoutPlan(models.Model):
         blank = True,
         null = True,
     )
-    workout = models.ForeignKey(
-        Workout,
+    routine = models.ForeignKey(
+        Routine,
         on_delete = models.SET_NULL,
         blank = True,
         null = True,
     )
     def __str__(self):
-        return self.plan.name + " -- " + self.workout.name
+        return self.plan.name + " -- " + self.routine.name
         
 
     

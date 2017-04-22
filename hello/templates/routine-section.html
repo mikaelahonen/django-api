@@ -5,17 +5,11 @@
 
 {% load bootstrap %}
 
-  <div class="container">
 
-
-  
-<h1>Workout sections</h1>
-<b>Workout {{workout.name}} selected</b>
-<legend></legend>
 <div class="col-sm-4">
 	<h2>Create</h2>	
 	<div class="form">
-		<form class="form-group" action="{% url 'gym:section-create' workout.id %}" method="post">{% csrf_token %}
+		<form class="form-group" action="{% url 'gym:section-create' routine.id %}" method="post">{% csrf_token %}
 		{{form|bootstrap}}	
 		<input type="submit" class="btn btn-success" value="Add" />
 		</form>
@@ -23,13 +17,14 @@
 </div>
 
 <div class="col-sm-8">
-	<h2>Workout sections</h2>
+	<h2>Routine sections</h2>
 
 	<table class="table">
 	<thead>
 		<th>Id</th>
 		<th>Excercise</th>
-		<th>Workout</th>
+		<th>Sets</th>
+		<th>Target</th>
 		<th>Delete</th>
 		<th>Edit</th>
 	</thead>
@@ -38,8 +33,9 @@
 		<tr>
 			<td>{{ section.id }}</td>
 			<td>{{ section.excercise}}</td>
-			<td>{{ section.workout}}</td>
-			<td><a class="btn btn-danger" href="{% url 'gym:section-delete' section.id workout.id%}">Delete</a></td>
+			<td>{{ section.sets}}</td>
+			<td>{{ section.target}}</td>
+			<td><a class="btn btn-danger" href="{% url 'gym:section-delete' section.id routine.id%}">Delete</a></td>
 			<td><a class="btn btn-primary" href="{% url 'gym:section-update' section.id  %}">Edit</a></td>
 		</tr>
 	{% endfor %}

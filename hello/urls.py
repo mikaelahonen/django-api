@@ -35,12 +35,12 @@ urlpatterns = [
     url(r'^excercise/'+pk+'/update$',v.excerciseUpdate,name='excercise-update'),
     
     #Workout
-    url(r'^workout/$',v.workoutList, name="workout-list"),
-    url(r'^workout/create$',v.workoutCreate, name="workout-create"),
-    url(r'^workout/'+pk+'/delete$',v.workoutDelete, name="workout-delete"),
-    url(r'^workout/'+pk+'/update$',v.workoutUpdate, name="workout-update"),
-    url(r'^workout/'+pk+'/section$',v.workoutSection, name="workout-section"),
-    #url(r'^workouts/'+workout_id+'$',v.WorkoutView.view, name="workout-detail"),
+    url(r'^routine/$',v.routineList, name="routine-list"),
+    url(r'^routine/create$',v.routineCreate, name="routine-create"),
+    url(r'^routine/'+pk+'/delete$',v.routineDelete, name="routine-delete"),
+    url(r'^routine/'+pk+'/update$',v.routineUpdate, name="routine-update"),
+    url(r'^routine/'+pk+'/section$',v.routineSection, name="routine-section"),
+    #url(r'^routines/'+routine_id+'$',v.routineView.view, name="routine-detail"),
     
     #WorkoutPlan
     #url(r'^workoutplans/all$',v.WorkoutPlanView.all, name="workoutplans-all"),

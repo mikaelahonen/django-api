@@ -21,6 +21,8 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"  />
 	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+
+	
 	<!-- Font -->
 	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 	
@@ -48,12 +50,12 @@
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				<i class="fa fa-flash"></i> Gym<span class="caret"></span></a>
 			  <ul class="dropdown-menu" role="menu">                      
-				<li><a href="{% url 'gym:plan-list' %}">Plans</a></li>
-				<li><a href="{% url 'gym:workout-list' %}">Workouts</a></li>
+				<li><a href="{% url 'gym:plan-list' %}">Plan</a></li>
+				<li><a href="{% url 'gym:routine-list' %}">Routine</a></li>
 				<li><a href="#">Sessions</a></li>
-				<li><a href="{% url 'gym:muscleGroups' %}">Muscle Groups</a></li>
-				<li><a href="{% url 'gym:excercise-list' %}">Excercises</a></li>
-				<li><a href="{% url 'gym:sets' %}">Sets</a></li>
+				<li><a href="{% url 'gym:muscleGroups' %}">Muscle Group</a></li>
+				<li><a href="{% url 'gym:excercise-list' %}">Excercise</a></li>
+				<li><a href="{% url 'gym:sets' %}">Set</a></li>
 				<li class="divider"></li>
 				<li><a href="#">--Other stuff--</a></li>
 			  </ul>
@@ -78,12 +80,23 @@
   </div> <!-- End container fluid -->
 </nav>
 
+{% if img %}
+	<div class="head-img" style="background-image: url('{{img}}');">
+	</div>
+{% endif %}
+
 <div class="container">
 		<div class="row">
-		
-				{% block content %}{% endblock %}
-
-
+			<div class="col-md-12">
+				
+				{% if head %}
+					<h1>{{head}}</h1>
+					<legend></legend>
+				{% endif %}
+				<div class="row">		
+					{% block content %}{% endblock %}
+				</div>
+			</div>
 	</div>
 </div>
 
