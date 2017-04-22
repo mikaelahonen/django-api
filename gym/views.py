@@ -18,7 +18,7 @@ from django.views.generic.list import ListView
 import datetime as dt
 
 #Import models
-from .models import Greeting, MuscleGroup, Excercise, Plan, Routine, WorkoutPlan, Section
+from .models import MuscleGroup, Excercise, Plan, Routine, WorkoutPlan, Section
 
 #import forms
 from .forms import PlanForm, RoutineForm, WorkoutPlanForm, ExcerciseForm, SectionForm

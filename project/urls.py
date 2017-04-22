@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 #admin.autodiscover()
 
-import hello.views
+import gym.views
 
 # Examples:
 # url(r'^$', 'gettingstarted.views.home', name='home'),
@@ -15,8 +15,8 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     
     
-    url(r'^$', hello.views.index, name='index'),
-    url(r'^db', hello.views.db, name='db'),
-    url(r'^gym/', include('hello.urls')),
+    url(r'^$', gym.views.index, name='index'),
+    url(r'^db', gym.views.db, name='db'),
+    url(r'^gym/', include('gym.urls')),
 ]
 
