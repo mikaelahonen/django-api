@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
+#Local test environment credentials
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

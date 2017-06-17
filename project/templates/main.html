@@ -49,15 +49,19 @@
 		  <li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				<i class="fa fa-flash"></i> Gym<span class="caret"></span></a>
-			  <ul class="dropdown-menu" role="menu">                      
+			  <ul class="dropdown-menu" role="menu">
+				<li class="dropdown-header">Template</li>
 				<li><a href="{% url 'gym:plan-list' %}">Plan</a></li>
 				<li><a href="{% url 'gym:routine-list' %}">Routine</a></li>
-				<li><a href="#">Sessions</a></li>
+				<li><a href="{% url 'gym:section-list' %}">Section</a></li>
+				<li role="separator" class="divider"></li>
+				<li class="dropdown-header">Training</li>
+				<li><a href="#">Sessions</a></li>				
+				<li><a href="{% url 'gym:sets' %}">Sets</a></li>
+				<li role="separator" class="divider"></li>
+				<li class="dropdown-header">Manage</li>
 				<li><a href="{% url 'gym:muscleGroups' %}">Muscle Group</a></li>
 				<li><a href="{% url 'gym:excercise-list' %}">Excercise</a></li>
-				<li><a href="{% url 'gym:sets' %}">Set</a></li>
-				<li class="divider"></li>
-				<li><a href="#">--Other stuff--</a></li>
 			  </ul>
 		  </li>
 		</ul>

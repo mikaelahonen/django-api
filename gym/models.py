@@ -92,7 +92,7 @@ class Section(models.Model):
         on_delete = models.CASCADE
     )
      
-#Connection table between Routines and Plans
+#Connection table between PLans and Routines
 class WorkoutPlan(models.Model):
     plan = models.ForeignKey(
         Plan,
@@ -108,6 +108,23 @@ class WorkoutPlan(models.Model):
     )
     def __str__(self):
         return self.plan.name + " -- " + self.routine.name
+
+#Connection table between Routines and Sections
+class RoutineSection(models.Model):
+    routine = models.ForeignKey(
+        Routine,
+        on_delete = models.SET_NULL,
+        blank = True,
+        null = True,
+    )
+    section = models.ForeignKey(
+        Section,
+        on_delete = models.SET_NULL,
+        blank = True,
+        null = True,
+    )
+    def __str__(self):
+        return self.routine.name + " -- " + self.section.name
         
 
     

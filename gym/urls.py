@@ -47,8 +47,13 @@ urlpatterns = [
     url(r'^workoutplan/create',v.workoutPlanCreate, name="workoutplan-create"),
     url(r'^workoutplan/'+pk+'/delete$',v.workoutPlanDelete, name="workoutplan-delete"),
     url(r'^workoutplan/'+pk+'/update$',v.workoutPlanUpdate, name="workoutplan-update"),
-    #url(r'^workoutplans/'+workoutplan_id+'$',v.WorkoutPlanView.view, name="workoutplans-view"),
     url(r'^workoutplan/'+pk+'/manage$',v.workoutPlanManage, name="workoutplan-manage"),
+    
+    #RoutineSection
+    url(r'^routinesection/create',v.routineSectionCreate, name="routinesection-create"),
+    url(r'^routinesection/'+pk+'/delete$',v.routineSectionDelete, name="routinesection-delete"),
+    url(r'^routinesection/'+pk+'/update$',v.routineSectionUpdate, name="routinesection-update"),
+    url(r'^routinesection/'+pk+'/manage$',v.routineSectionManage, name="routinesection-manage"),
     
     #Section
     url(r'^section/$',v.sectionList, name="section-list"),

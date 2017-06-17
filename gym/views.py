@@ -18,10 +18,10 @@ from django.views.generic.list import ListView
 import datetime as dt
 
 #Import models
-from .models import MuscleGroup, Excercise, Plan, Routine, WorkoutPlan, Section
+from .models import MuscleGroup, Excercise, Plan, Routine, Section, WorkoutPlan, RoutineSection
 
 #import forms
-from .forms import PlanForm, RoutineForm, WorkoutPlanForm, ExcerciseForm, SectionForm
+from .forms import  ExcerciseForm, PlanForm, RoutineForm, WorkoutPlanForm, RoutineSectionForm, SectionForm
 
 hLink="<br><a href='/'>Back to home</a>"
 
@@ -212,40 +212,7 @@ def routineSection(request, pk):
     }
     return render(request,"routine-section.html",context)
     
-#WORKOUT-PLAN
-  
-
-@login_required  
-def workoutPlanCreate(request):
-
-    if request.method=='POST':
-        formData=WorkoutPlanForm(request.POST)
-        
-        if formData.is_valid():
-            workoutPlan = formData.save()
-            #name = form.cleaned_data['name']
-        else:
-            formData = WorkoutPlanForm()
-    return render(request,"add.html",{'obj':workoutPlan,'request':request})
-
-def workoutPlanManage(request, pk):
-    workoutPlans = WorkoutPlan.objects.filter(plan=pk)
-    form = WorkoutPlanForm()
-    return render(request,"workoutplan-manage.html",{"workoutPlans":workoutPlans,"form":form,"pk":pk})
-
-def workoutPlanUpdate(request, workoutpk):
-    obj = WorkoutPlan.objects.get(id=workoutpk)
-    form = WorkoutPlanForm(request.POST or None, instance=obj)
-    if form.is_valid():
-        form.save() 
-    return render(request,"update.html",{'obj':workoutPlan, 'form':form,'request':request})
     
-def workoutPlanDelete(request, pk):
-    workoutPlan = WorkoutPlan.objects.get(id=pk)
-    workoutPlan.delete()
-    return render(request,"delete.html",{'obj':workoutPlan,'request':request})
-    
-
     
     
 #SECTION
@@ -278,3 +245,81 @@ def sectionUpdate(request, pk):
     if form.is_valid():
         form.save()                         
     return render(request,"update.html",{'obj':obj, 'form':form})
+    
+    
+    
+    
+#WORKOUT-PLAN  
+
+@login_required  
+def workoutPlanCreate(request):
+
+    if request.method=='POST':
+        formData=WorkoutPlanForm(request.POST)
+        
+        if formData.is_valid():
+            workoutPlan = formData.save()
+            #name = form.cleaned_data['name']
+        else:
+            formData = WorkoutPlanForm()
+    return render(request,"add.html",{'obj':workoutPlan,'request':request})
+
+@login_required  
+def workoutPlanManage(request, pk):
+    workoutPlans = WorkoutPlan.objects.filter(plan=pk)
+    form = WorkoutPlanForm()
+    return render(request,"workoutplan-manage.html",{"workoutPlans":workoutPlans,"form":form,"pk":pk})
+
+@login_required  
+def workoutPlanUpdate(request, workoutpk):
+    obj = WorkoutPlan.objects.get(id=workoutpk)
+    form = WorkoutPlanForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save() 
+    return render(request,"update.html",{'obj':workoutPlan, 'form':form,'request':request})
+    
+@login_required      
+def workoutPlanDelete(request, pk):
+    workoutPlan = WorkoutPlan.objects.get(id=pk)
+    workoutPlan.delete()
+    return render(request,"delete.html",{'obj':workoutPlan,'request':request})
+    
+    
+    
+    
+#ROUTINE-SECTION  
+
+@login_required  
+def routineSectionCreate(request):
+
+    if request.method=='POST':
+        formData=RoutineSectionForm(request.POST)
+        
+        if formData.is_valid():
+            routineSection = formData.save()
+        else:
+            formData = RoutineSectionForm()
+    return render(request,"add.html",{'obj':routineSection,'request':request})
+
+@login_required  
+def routineSectionManage(request, pk):
+    routineSections = RoutineSection.objects.filter(plan=pk)
+    form = RoutineSectionForm()
+    return render(request,"routinesection-manage.html",{"routineSections":routineSections,"form":form,"pk":pk})
+
+@login_required  
+def routineSectionUpdate(request, workoutpk):
+    obj = RoutineSection.objects.get(id=workoutpk)
+    form = RoutineSectionForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save() 
+    return render(request,"update.html",{'obj':routineSection, 'form':form,'request':request})
+
+@login_required  
+def routineSectionDelete(request, pk):
+    routineSection = RoutineSection.objects.get(id=pk)
+    routineSection.delete()
+    return render(request,"delete.html",{'obj':routineSection,'request':request})
+
+    
+    
