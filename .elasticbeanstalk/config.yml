@@ -1,6 +1,6 @@
 branch-defaults:
   master:
-    environment: null
+    environment: test
     group_suffix: null
 global:
   application_name: django-app-2
