@@ -61,7 +61,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         #Add project folder for templates
-        'DIRS': ['project/templates'],
+        'DIRS': ['myproject/project/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'debug': True,
