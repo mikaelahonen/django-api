@@ -1,13 +1,13 @@
 branch-defaults:
   master:
-    environment: test
+    environment: env1
     group_suffix: null
 global:
-  application_name: django-app-2
+  application_name: django-app
   branch: null
   default_ec2_keyname: aws-eb
   default_platform: Python 3.4
-  default_region: eu-west-2
+  default_region: eu-central-1
   instance_profile: null
   platform_name: null
   platform_version: null
