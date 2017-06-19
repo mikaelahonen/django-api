@@ -1,6 +1,6 @@
 branch-defaults:
   master:
-    environment: env1
+    environment: Sample-env
     group_suffix: null
 global:
   application_name: django-app
