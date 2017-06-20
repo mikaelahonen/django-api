@@ -1,19 +1,17 @@
 branch-defaults:
   master:
-    environment: Sample-env
-environment-defaults:
-  Sample-env:
-    branch: null
-    repository: null
+    environment: test
+    group_suffix: Sample-env
 global:
   application_name: django-app
-  default_ec2_keyname: null
-  default_platform: arn:aws:elasticbeanstalk:eu-west-1::platform/Python 3.4 running
-    on 64bit Amazon Linux/2.4.0
+  branch: null
+  default_ec2_keyname: aws-eb
+  default_platform: Python 3.4
   default_region: eu-west-1
   instance_profile: null
   platform_name: null
   platform_version: null
   profile: eb-cli
+  repository: null
   sc: git
   workspace_type: Application
