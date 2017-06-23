@@ -8,3 +8,13 @@ db.sqlite3
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Virtual environments
+myenv34/*
+myenv/*
+
+# Heroku
+Procfile
+Procfile.windows
+runtime.txt
+app.json

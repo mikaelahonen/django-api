@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-#Local test environment credentials
+#Elastic beanstalk database credentials
 if 'RDS_DB_NAME' in os.environ:
     DATABASES = {
         'default': {
@@ -92,6 +92,7 @@ if 'RDS_DB_NAME' in os.environ:
             'PORT': os.environ['RDS_PORT'],
         }
     }
+#Local test environment credentials
 else:
     DATABASES = {
         'default': {
