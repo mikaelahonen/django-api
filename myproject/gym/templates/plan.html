@@ -1,44 +1,55 @@
 {% extends "main.html" %}
-{% load staticfiles %}
-
+{% load bootstrap %}
 {% block content %}
-  <div class="container">
+
+ <div class="container">
 
 
   
-<h1>Training Plans</h1>
-<h2>Add new</h2>
+	<h1>Training Plans</h1>
 
-<form action="{% url 'gym:plan-create' %}" method="post">
-	{% csrf_token %}
-	<div class="form-group">
-	{{form.as_p}}
-	<input type="submit" class="btn btn-success form-control" value="Add" />
+	<div class="col-sm-4">
+		<h2>Add new</h2>
+
+		<form action="{% url 'gym:plan-create' %}" method="post">
+			{% csrf_token %}
+			<div class="form-group">
+			{{form|bootstrap}}
+			<input type="submit" class="btn btn-success form-control" value="Add" />
+			</div>
+		</form>
 	</div>
-</form>
 
-<h2>Plan list</h2>
+	<div class="col-sm-8">
+		<h2>Plan list</h2>
 
-<table class="table">
-<tr>
-	<th>Id</th>
-	<th>Name</th>
-	<th>Workouts</th>
-	<th>Delete</th>
-	<th>Edit</th>
-</tr>
-{% for plan in plans %}
-	
-    <tr>
-		<td>{{ plan.id }}</td>
-		<td><a href="{% url 'gym:plan-detail' plan.id %}">{{ plan.name }}</a></td>
-		<td><a href="{% url 'gym:workoutplan-manage' plan.id %} ">{{ plan.workoutplan__count }}</a></td>
-		<td><a href="{% url 'gym:plan-delete' plan.id %}">Delete</a></td>
-		<td><a href="{% url 'gym:plan-update' plan.id %}">Edit</a></td>
-	</tr>
-{% endfor %}
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Routines</th>
+					<th>Delete</th>
+					<th>Edit</th>
+					<th>Start</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+			{% for plan in plans %}			
+				<tr>
+					<td>{{ plan.id }}</td>
+					<td><a href="{% url 'gym:plan-detail' plan.id %}">{{ plan.name }}</a></td>
+					<td><a href="{% url 'gym:routineplan-manage' plan.id %} ">{{ plan.routineplan__count }}</a></td>
+					<td><a href="{% url 'gym:plan-delete' plan.id %}">Delete</a></td>
+					<td><a href="{% url 'gym:plan-update' plan.id %}">Edit</a></td>
+					<td><a href="{% url 'gym:plan-start' plan.id %}">Start</a></td>
+				</tr>
+			{% endfor %}
+			<tbody>
 
-</table>
+		</table>
+	</div>
 
 </div>
 

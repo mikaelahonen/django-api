@@ -1,9 +1,0 @@
-<div class="col-md-4">
-
-</div>
-<div class="col-md-8">
-<form action="{% url 'gym:excercise-create' %}" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save" />
-</form>
-</div>

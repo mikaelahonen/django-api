@@ -7,14 +7,16 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 
-#This class must be introduced before it can be referenced
+# Muscle groups
 class MuscleGroup(models.Model):
-    muscle_group = models.CharField(max_length=50)
-    
+    muscle_group = models.CharField(
+        max_length=50
+    )    
     #Make single object to show "Chest" instead of "MuscleGroup object"
     def __str__(self):
         return self.muscle_group
-    
+
+# Excercises
 class Excercise(models.Model):
     excercise = models.CharField(max_length=100)
     muscle_group = models.ForeignKey(
@@ -39,13 +41,32 @@ class Excercise(models.Model):
     def get_absolute_url(self):
         return reverse('excercise-detail', kwargs={'pk': self.pk})
         
-      
+# Plan is a template for program      
 class Plan(models.Model):
     name = models.CharField(max_length = 100)
     
     def __str__(self):
         return self.name
+        
+        
+    def start(plan):
+        # Get list RoutinePlans
+        # id routine plan
+        routinePlanList = RoutinePlan.objects.filter(plan=plan)
+        # Loop all RoutinePlans
+        for routinePlan in routinePlanList:
+            # Get Routine Id from the RoutinePlan
+            #routineId = routinePlan.routine
+            # Get routine object by id
+            routine = Routine.objects.get(id=routinePlan.routine.id)
+            Workout.objects.create(
+                name = routine.name
+            )
+        return True
+        # Create program
+        # Create workout
 
+#Routine is a template for workout
 class Routine(models.Model):
     TYPE_CHOICES = (
         ('SS','Superset'), #Change between two exercises
@@ -71,6 +92,7 @@ class Routine(models.Model):
     def __str__(self):
         return self.name
 
+# A Section of a Routine
 class Section(models.Model):
     index = models.IntegerField(
         default = 1,
@@ -93,7 +115,7 @@ class Section(models.Model):
     )
      
 #Connection table between PLans and Routines
-class WorkoutPlan(models.Model):
+class RoutinePlan(models.Model):
     plan = models.ForeignKey(
         Plan,
         on_delete = models.SET_NULL,
@@ -125,6 +147,26 @@ class RoutineSection(models.Model):
     )
     def __str__(self):
         return self.routine.name + " -- " + self.section.name
+        
+class Workout(models.Model):
+    name = models.CharField(
+        default = "Workout X",
+        max_length = 50,
+    )
+    start_time = models.DateTimeField(
+        null = True,
+    )
+    end_time = models.DateTimeField(
+        null = True,
+    )
+    location = models.CharField(
+        default = "Gym X",
+        max_length = 50,
+        null = True,
+    )
+    def __str__(self):
+        return self.name
+    
         
 
     

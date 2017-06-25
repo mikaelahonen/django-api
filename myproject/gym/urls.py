@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^plan/'+pk+'/delete$',v.planDelete, name="plan-delete"),
     url(r'^plan/'+pk+'/edit$',v.planUpdate, name="plan-update"),
     url(r'^plan/'+pk+'$',v.planDetail, name="plan-detail"),
+    url(r'^plan/'+pk+'/start$',v.planStart, name="plan-start"),
     
     #Excercise
     #url(r'^excercise/'+pk+'/$',ExcerciseView.detail,name='excercise-detail'),
@@ -43,11 +44,11 @@ urlpatterns = [
     #url(r'^routines/'+routine_id+'$',v.routineView.view, name="routine-detail"),
     
     #WorkoutPlan
-    #url(r'^workoutplans/all$',v.WorkoutPlanView.all, name="workoutplans-all"),
-    url(r'^workoutplan/create',v.workoutPlanCreate, name="workoutplan-create"),
-    url(r'^workoutplan/'+pk+'/delete$',v.workoutPlanDelete, name="workoutplan-delete"),
-    url(r'^workoutplan/'+pk+'/update$',v.workoutPlanUpdate, name="workoutplan-update"),
-    url(r'^workoutplan/'+pk+'/manage$',v.workoutPlanManage, name="workoutplan-manage"),
+    #url(r'^routineplans/all$',v.WorkoutPlanView.all, name="routineplans-all"),
+    url(r'^routineplan/create',v.routinePlanCreate, name="routineplan-create"),
+    url(r'^routineplan/'+pk+'/delete$',v.routinePlanDelete, name="routineplan-delete"),
+    url(r'^routineplan/'+pk+'/update$',v.routinePlanUpdate, name="routineplan-update"),
+    url(r'^routineplan/'+pk+'/manage$',v.routinePlanManage, name="routineplan-manage"),
     
     #RoutineSection
     url(r'^routinesection/create',v.routineSectionCreate, name="routinesection-create"),
@@ -57,10 +58,12 @@ urlpatterns = [
     
     #Section
     url(r'^section/$',v.sectionList, name="section-list"),
-    #Here pk is the workout primary key
     url(r'^section/create/'+pk+'$',v.sectionCreate, name="section-create"),
     url(r'^section/'+pk+'/delete/'+pk2+'$',v.sectionDelete, name="section-delete"),
     url(r'^section/'+pk+'/update$',v.sectionUpdate, name="section-update"),
+    
+    #Workout
+    url(r'^workout/$',v.workoutList, name="workout-list"),    
     #url(r'^workout/create$',v.workoutCreate, name="workout-create"),
     #url(r'^workout/'+pk+'/delete$',v.workoutDelete, name="workout-delete"),
     #url(r'^workout/'+pk+'/update$',v.workoutUpdate, name="workout-update"),
@@ -68,4 +71,10 @@ urlpatterns = [
     
     #Include function chops off the rest and sends remaining to URLconf
     #url(r'^sessions', include('gymsessions.urls'))
+    
+    #React test
+    url(r'^react-test/$',v.reactTest,name='react-test'),
+    
+    #Ajax
+    url(r'ajax/fetch-time/$',v.fetchTime, name='fetch-time'),
 ]

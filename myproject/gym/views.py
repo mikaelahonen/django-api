@@ -16,12 +16,13 @@ from django.views.generic.list import ListView
 
 #Python libraries
 import datetime as dt
+import json
 
 #Import models
-from .models import MuscleGroup, Excercise, Plan, Routine, Section, WorkoutPlan, RoutineSection
+from .models import MuscleGroup, Excercise, Plan, Routine, Section, RoutinePlan, RoutineSection, Workout
 
 #import forms
-from .forms import  ExcerciseForm, PlanForm, RoutineForm, WorkoutPlanForm, RoutineSectionForm, SectionForm
+from .forms import  ExcerciseForm, PlanForm, RoutineForm, RoutinePlanForm, RoutineSectionForm, SectionForm, WorkoutForm
 
 hLink="<br><a href='/'>Back to home</a>"
 
@@ -100,7 +101,7 @@ def excerciseUpdate(request, pk):
 #PLAN
 @login_required  
 def planList(request):
-    plans = Plan.objects.annotate(Count('workoutplan'))
+    plans = Plan.objects.annotate(Count('routineplan'))
     #plans = Plan.objects.all()
     form = PlanForm()
     context = {
@@ -126,7 +127,7 @@ def planCreate(request):
 @login_required
 def planDetail(request, pk):
     plan = Plan.objects.get(id=pk)
-    routines = Routine.objects.filter(workoutplan__plan=pk).all()
+    routines = Routine.objects.filter(routineplan__plan=pk).all()
     context = {
         'head': 'Plan: "' + plan.name + '"',
         'routines': routines,
@@ -148,7 +149,11 @@ def planDelete(request, pk):
     plan.delete()
     return redirect('gym:plan-list')  
     
-    
+@login_required
+def planStart(request, pk):
+    plan = Plan.objects.get(id=pk)
+    Plan.start(plan)
+    return redirect('gym:workout-list')
     
 #ROUTINE
 @login_required
@@ -192,7 +197,6 @@ def routineUpdate(request, pk):
         }
         return render(request,"update.html",context)
         
-
 @login_required    
 def routineDelete(request, pk):
     obj = Routine.objects.get(id=pk)
@@ -230,7 +234,7 @@ def sectionCreate(request,pk):
             obj = formData.save()
         else:
             formData = SectionForm()
-    return redirect('gym:routine-section', pk=obj.workout.id)
+    return redirect('gym:routine-section', pk=obj.routine.id)
 
 @login_required  
 def sectionDelete(request, pk, pk2):
@@ -249,40 +253,40 @@ def sectionUpdate(request, pk):
     
     
     
-#WORKOUT-PLAN  
+#routine-PLAN  
 
 @login_required  
-def workoutPlanCreate(request):
+def routinePlanCreate(request):
 
     if request.method=='POST':
-        formData=WorkoutPlanForm(request.POST)
+        formData=RoutinePlanForm(request.POST)
         
         if formData.is_valid():
-            workoutPlan = formData.save()
+            routinePlan = formData.save()
             #name = form.cleaned_data['name']
         else:
-            formData = WorkoutPlanForm()
-    return render(request,"add.html",{'obj':workoutPlan,'request':request})
+            formData = RoutinePlanForm()
+    return render(request,"add.html",{'obj':routinePlan,'request':request})
 
 @login_required  
-def workoutPlanManage(request, pk):
-    workoutPlans = WorkoutPlan.objects.filter(plan=pk)
-    form = WorkoutPlanForm()
-    return render(request,"workoutplan-manage.html",{"workoutPlans":workoutPlans,"form":form,"pk":pk})
+def routinePlanManage(request, pk):
+    routinePlans = RoutinePlan.objects.filter(plan=pk)
+    form = RoutinePlanForm()
+    return render(request,"routineplan-manage.html",{"routinePlans":routinePlans,"form":form,"pk":pk})
 
 @login_required  
-def workoutPlanUpdate(request, workoutpk):
-    obj = WorkoutPlan.objects.get(id=workoutpk)
-    form = WorkoutPlanForm(request.POST or None, instance=obj)
+def routinePlanUpdate(request, routinepk):
+    obj = RoutinePlan.objects.get(id=routinepk)
+    form = RoutinePlanForm(request.POST or None, instance=obj)
     if form.is_valid():
         form.save() 
-    return render(request,"update.html",{'obj':workoutPlan, 'form':form,'request':request})
+    return render(request,"update.html",{'obj':routinePlan, 'form':form,'request':request})
     
 @login_required      
-def workoutPlanDelete(request, pk):
-    workoutPlan = WorkoutPlan.objects.get(id=pk)
-    workoutPlan.delete()
-    return render(request,"delete.html",{'obj':workoutPlan,'request':request})
+def routinePlanDelete(request, pk):
+    routinePlan = RoutinePlan.objects.get(id=pk)
+    routinePlan.delete()
+    return render(request,"delete.html",{'obj':routinePlan,'request':request})
     
     
     
@@ -308,8 +312,8 @@ def routineSectionManage(request, pk):
     return render(request,"routinesection-manage.html",{"routineSections":routineSections,"form":form,"pk":pk})
 
 @login_required  
-def routineSectionUpdate(request, workoutpk):
-    obj = RoutineSection.objects.get(id=workoutpk)
+def routineSectionUpdate(request, routinepk):
+    obj = RoutineSection.objects.get(id=routinepk)
     form = RoutineSectionForm(request.POST or None, instance=obj)
     if form.is_valid():
         form.save() 
@@ -321,5 +325,46 @@ def routineSectionDelete(request, pk):
     routineSection.delete()
     return render(request,"delete.html",{'obj':routineSection,'request':request})
 
+
+
+    
+#WORKOUT
+
+@login_required
+def workoutList(request):
+    head = "All workouts"
+    template = "workout.html"
+    objs = Workout.objects.all()
+    #form = SectionForm()
+    context = {
+        "objs": objs,
+        "form": WorkoutForm(),
+        "head": head
+    }
+    return render(request, template, context) 
     
     
+    
+    
+    
+# React test
+def reactTest(request):
+    # return HttpResponse('Hello from Python!')
+    template = 'react-test.html'
+    context = {
+        'head': 'React head',
+        'component': 'react-component.js',
+        'props': {
+            'color': 'Red',
+            'time':  dt.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+        },
+    }
+    return render(request, template, context)
+    
+def fetchTime(request):
+    t = dt.datetime.now().strftime("%I:%M:%S %d.%m.%Y")
+    jsonStr = {
+        'time': t
+    }
+    jsonStr = json.dumps(jsonStr)
+    return HttpResponse(jsonStr)
