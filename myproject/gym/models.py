@@ -5,7 +5,7 @@ from django.forms import ModelForm
 #In django 1.10 this would be from django.urls import reverse
 from django.core.urlresolvers import reverse
 from django.db import models
-
+import datetime
 
 # Muscle groups
 class MuscleGroup(models.Model):
@@ -48,7 +48,7 @@ class Plan(models.Model):
     def __str__(self):
         return self.name
         
-        
+    #Initialize Workouts from a Plan template
     def start(plan):
         # Get list RoutinePlans
         # id routine plan
@@ -56,12 +56,23 @@ class Plan(models.Model):
         # Loop all RoutinePlans
         for routinePlan in routinePlanList:
             # Get Routine Id from the RoutinePlan
-            #routineId = routinePlan.routine
+            # routineId = routinePlan.routine
             # Get routine object by id
             routine = Routine.objects.get(id=routinePlan.routine.id)
-            Workout.objects.create(
-                name = routine.name
-            )
+            # Create new Workout from Routine and save to variable
+            newWorkout = Workout.objects.create(name = routine.name)
+            # Get Sections
+            sectionList = Section.objects.filter(routine=routine.id)
+            # Loop Sections
+            for section in sectionList:
+                # Loop section by the number of sets
+                for i in range(0, section.sets):
+                    #Create Set object where foreign key is the related Workout
+                    Set.objects.create(
+                        workout = newWorkout,
+                        excercise = section.excercise
+                    )
+            
         return True
         # Create program
         # Create workout
@@ -166,6 +177,25 @@ class Workout(models.Model):
     )
     def __str__(self):
         return self.name
+        
+class Set(models.Model):
+    excercise = models.ForeignKey(
+        Excercise,
+        on_delete = models.CASCADE
+    )
+    workout = models.ForeignKey(
+        Workout,
+        on_delete = models.SET_NULL,
+        null = True,
+    )
+    reps = models.IntegerField(
+        default = None,
+        null = True,
+    )
+    weight = models.IntegerField(
+        default = None,
+        null = True,
+    )
     
         
 

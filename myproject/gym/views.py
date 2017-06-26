@@ -237,10 +237,10 @@ def sectionCreate(request,pk):
     return redirect('gym:routine-section', pk=obj.routine.id)
 
 @login_required  
-def sectionDelete(request, pk, pk2):
+def sectionDelete(request, pk):
     obj = Section.objects.get(id=pk)
     obj.delete()
-    return redirect('gym:routine-section', pk=pk2)
+    return redirect('gym:section-list')
 
 @login_required    
 def sectionUpdate(request, pk):

@@ -40,7 +40,7 @@ urlpatterns = [
     url(r'^routine/create$',v.routineCreate, name="routine-create"),
     url(r'^routine/'+pk+'/delete$',v.routineDelete, name="routine-delete"),
     url(r'^routine/'+pk+'/update$',v.routineUpdate, name="routine-update"),
-    url(r'^routine/'+pk+'/section$',v.routineSection, name="routine-section"),
+    #url(r'^routine/'+pk+'/section$',v.routineSection, name="routine-section"),
     #url(r'^routines/'+routine_id+'$',v.routineView.view, name="routine-detail"),
     
     #WorkoutPlan
@@ -59,11 +59,11 @@ urlpatterns = [
     #Section
     url(r'^section/$',v.sectionList, name="section-list"),
     url(r'^section/create/'+pk+'$',v.sectionCreate, name="section-create"),
-    url(r'^section/'+pk+'/delete/'+pk2+'$',v.sectionDelete, name="section-delete"),
+    url(r'^section/'+pk+'/delete$',v.sectionDelete, name="section-delete"),
     url(r'^section/'+pk+'/update$',v.sectionUpdate, name="section-update"),
     
     #Workout
-    url(r'^workout/$',v.workoutList, name="workout-list"),    
+    url(r'^workout/$',v.workoutList, name="workout-list"),
     #url(r'^workout/create$',v.workoutCreate, name="workout-create"),
     #url(r'^workout/'+pk+'/delete$',v.workoutDelete, name="workout-delete"),
     #url(r'^workout/'+pk+'/update$',v.workoutUpdate, name="workout-update"),

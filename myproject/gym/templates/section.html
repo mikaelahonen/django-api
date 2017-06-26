@@ -26,7 +26,7 @@
 	<thead>
 		<tr>
 			<th>Id</th>
-			<th>Workout</th>
+			<th>Routine</th>
 			<th>Excercise</th>
 			<th>Index</th>
 			<th>Sets</th>
@@ -38,13 +38,13 @@
 	{% for obj in objs %}
 		<tr>
 		<td>{{obj.id}}</td>
-		<td>{{obj.workout}}</td>
+		<td>{{obj.routine}}</td>
 		<td>{{obj.excercise}}</td>
 		<td>{{obj.index}}</td>
 		<td>{{obj.sets}}</td>
 		<td>{{obj.target}}</td>
-		<td><a  class='btn btn-danger' href="">Delete</a></td>
-		<td><a  class='btn btn-primary' href="">Update</a></td>
+		<td><a  class='btn btn-danger' href="{% url 'gym:section-delete' obj.id %}">Delete</a></td>
+		<td><a  class='btn btn-primary' href="{% url 'gym:section-update' obj.id %}">Update</a></td>
 		</tr>
 	{% empty %}
 		<p>No Sections yet.</p>
