@@ -17,7 +17,7 @@ pk2 = '(?P<pk2>[0-9]+)'
 
 #URL patterns
 urlpatterns = [
-    url(r'^sets$', v.sets, name='sets'),
+
     url(r'^muscle-groups$',v.muscleGroups, name="muscleGroups"),
     
     #PLAN
@@ -40,7 +40,7 @@ urlpatterns = [
     url(r'^routine/create$',v.routineCreate, name="routine-create"),
     url(r'^routine/'+pk+'/delete$',v.routineDelete, name="routine-delete"),
     url(r'^routine/'+pk+'/update$',v.routineUpdate, name="routine-update"),
-    #url(r'^routine/'+pk+'/section$',v.routineSection, name="routine-section"),
+    url(r'^routine/'+pk+'/section$',v.routineSection, name="routine-section"),
     #url(r'^routines/'+routine_id+'$',v.routineView.view, name="routine-detail"),
     
     #WorkoutPlan
@@ -67,7 +67,13 @@ urlpatterns = [
     #url(r'^workout/create$',v.workoutCreate, name="workout-create"),
     #url(r'^workout/'+pk+'/delete$',v.workoutDelete, name="workout-delete"),
     #url(r'^workout/'+pk+'/update$',v.workoutUpdate, name="workout-update"),
-    #url(r'^workouts/'+workout_id+'$',v.WorkoutView.view, name="workout-detail"),
+    url(r'^workout/'+pk+'$',v.workoutView, name="workout-view"),
+    
+    url(r'^sets$', v.sets, name='sets'),
+    url(r'^workout/' + pk + '/set/default$',v.workoutSet, name="workout-set-default"),
+    url(r'^workout/' + pk + '/set/previous$',v.workoutSet, name="workout-set-previous"),
+    url(r'^workout/' + pk + '/set/next$',v.workoutSet, name="workout-set-next"),
+    url(r'^workout/' + pk + '/set/'+ pk2+ '$',v.workoutSet, name="workout-set"),
     
     #Include function chops off the rest and sends remaining to URLconf
     #url(r'^sessions', include('gymsessions.urls'))

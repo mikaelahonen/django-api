@@ -29,7 +29,7 @@
 	{% for obj in objs %}
 		<tr>
 			<td>{{obj.id}}</td>
-			<td>{{obj.name}}</td>
+			<td><a href="{% url 'gym:workout-set-default' obj.id %}">{{obj.name}}</a></td>
 			<td>{{obj.start_time}}</td>
 			<td>{{obj.end_time}}</td>
 			<td>{{obj.location }}</td>

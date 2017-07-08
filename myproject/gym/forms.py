@@ -5,7 +5,7 @@
 from django import forms
 
 #Import models
-from .models import  Excercise, Plan, Routine, Section, RoutinePlan, RoutineSection, Workout
+from .models import  *
 
 
 class PlanForm(forms.ModelForm):
@@ -66,3 +66,20 @@ class WorkoutForm(forms.ModelForm):
         
     editAction = 'gym:workout-list'
     addAction = 'gym:workout-list'
+    
+class SetForm(forms.ModelForm):
+    class Meta:
+        model = Set
+        fields = '__all__'
+        
+    editAction = 'gym:workout-set'
+    addAction = 'gym:workout-set'
+    
+class WorkoutSetForm(forms.ModelForm):
+    class Meta:
+        model = Set
+        fields = ['excercise','reps','weight']
+        
+    editAction = 'gym:workout-set'
+    addAction = 'gym:workout-set'
+    

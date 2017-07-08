@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     #Apps
     'gym',
     #django-bootstrap-form
-    'bootstrapform'
+    'bootstrapform',
+    'widget_tweaks'
 )
 
 MIDDLEWARE_CLASSES = (

@@ -8,3 +8,4 @@ django-bootstrap-form==3.2.1
 PyYAML==3.11
 bleach==2.0.0
 djangorestframework==3.6.3
+django-widget-tweaks==1.4.1

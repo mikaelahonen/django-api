@@ -1,0 +1,66 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<!-- Loads django-bootstrap-form-->
+{% load bootstrap %}
+{% load widget_tweaks %}
+
+<div class="col-sm-4">
+	<h2>Current set: {{setCurrent.id}}</h2>
+	<form action="{% url form.editAction workout.id setCurrent.id %}" method="post">
+		{% csrf_token %}
+		<div class="form-group">
+		{{form|bootstrap}}
+		<input type="submit" class="btn btn-success form-control" value="Save" />
+		</div>
+		
+	</form>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<input type="submit" class="btn btn-primary form-control" value="Previous" />
+		</div>
+		<div class="col-md-6">
+			<input type="submit" class="btn btn-primary form-control" value="Next" />
+		</div>
+	</div>
+	
+</div>
+
+<div class="col-sm-8">
+	<h2>All sets</h2>
+	
+	<table class="table">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Id</th>
+			<th>Muscle group</th>
+			<th>Excercise</th>
+			<th>Reps</th>
+			<th>Weight</th>
+			<!--<th></th>
+			<th></th>-->
+		</tr>
+	</thead>
+	{% for set in sets %}
+		<tr {% if setCurrent.id == set.id %} class="active" {% endif %}>
+			<td><a href="{% url 'gym:workout-set'  workout.id set.id %}" class="btn btn-default">Select</a></td>
+			<td>{{set.id}}</td>
+			<td>{{set.excercise.muscle_group }}</td>
+			<td>{{set.excercise}}</td>
+			<td>{{set.reps}}</td>
+			<td>{{set.weight}}</td>
+			
+			<!--<td><a  class='btn btn-danger' href="{% url 'gym:routine-delete' set.id %}">Delete</a></td>
+			<td><a  class='btn btn-primary' href="{% url 'gym:routine-update' set.id %}">Update</a></td>-->
+		</tr>
+	{% empty %}
+		<p>No Excercises yet.</p>
+	{% endfor %}
+	</table>
+	
+</div>
+
+{% endblock %}

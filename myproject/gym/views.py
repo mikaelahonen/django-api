@@ -6,6 +6,8 @@ from django.views import generic
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.forms import formset_factory
+from django.forms import inlineformset_factory
 
 #Generic form for editing records
 from django.views.generic import View
@@ -18,11 +20,9 @@ from django.views.generic.list import ListView
 import datetime as dt
 import json
 
-#Import models
-from .models import MuscleGroup, Excercise, Plan, Routine, Section, RoutinePlan, RoutineSection, Workout
-
-#import forms
-from .forms import  ExcerciseForm, PlanForm, RoutineForm, RoutinePlanForm, RoutineSectionForm, SectionForm, WorkoutForm
+# Import models and forms
+from .models import *
+from .forms import *
 
 hLink="<br><a href='/'>Back to home</a>"
 
@@ -44,12 +44,32 @@ def db(request):
     return render(request, 'db.html', {'greetings': greetings})
     
     
+    
+    
+#SET
 @login_required
 def sets(request):
     # return HttpResponse('Hello from Python!')
     txt='Page for gym sets <br>Now it\'s '
     date=dt.datetime.now()
     return HttpResponse(txt + str(date)+hLink)
+
+def setUpdate(request, pk, pk2):
+    obj = Set.objects.get(id=pk)
+    form = SetForm(request.POST or None, instance=obj)
+    template = "workout-view"
+    if request.method=='POST':
+        if form.is_valid():
+            form.save()                       
+        return redirect('gym:workout-set-2', pk, pk2)
+    else:
+        context = {
+            'obj': obj,
+            'form': form,
+            'request': request,
+        }
+        return render(request, template, context)
+    
     
 @login_required
 def muscleGroups(request):
@@ -335,15 +355,52 @@ def workoutList(request):
     head = "All workouts"
     template = "workout.html"
     objs = Workout.objects.all()
-    #form = SectionForm()
     context = {
         "objs": objs,
         "form": WorkoutForm(),
-        "head": head
+        "head": head,
     }
     return render(request, template, context) 
     
     
+@login_required
+def workoutView(request, pk):
+    template = "workout-view.html"
+    sets = Set.objects.filter(workout=pk)
+    workout = Workout.objects.get(id=pk)
+    head = "Current workout: " + workout.name
+   
+    context = {
+        "sets": sets,
+        "head": head,
+        "workout": workout
+    }
+    return render(request, template, context) 
+    
+@login_required
+def workoutSet(request, pk, pk2=None):
+    template = "workout-view.html"
+    sets = Set.objects.filter(workout=pk)
+    workout = Workout.objects.get(id=pk)
+    head = "Current workout: " + workout.name
+    if pk2 is None:
+        setCurrent = sets.first()
+    else:
+        setCurrent = Set.objects.get(id=pk2)      
+    form = WorkoutSetForm(request.POST or None, instance=setCurrent)
+    
+    
+    if request.method=='POST':
+        if form.is_valid():
+            form.save()                       
+    context = {
+        "setCurrent":setCurrent,
+        "sets": sets,
+        "head": head,
+        "workout": workout,
+        "form": form,
+    }
+    return render(request, template, context)
     
     
     

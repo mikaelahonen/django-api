@@ -6,6 +6,7 @@ from django.forms import ModelForm
 from django.core.urlresolvers import reverse
 from django.db import models
 import datetime
+import random
 
 # Muscle groups
 class MuscleGroup(models.Model):
@@ -18,6 +19,9 @@ class MuscleGroup(models.Model):
 
 # Excercises
 class Excercise(models.Model):
+    # String for random excercise
+    rndStr = "Random"
+        
     excercise = models.CharField(max_length=100)
     muscle_group = models.ForeignKey(
         MuscleGroup,
@@ -65,12 +69,18 @@ class Plan(models.Model):
             sectionList = Section.objects.filter(routine=routine.id)
             # Loop Sections
             for section in sectionList:
-                # Loop section by the number of sets
+                # If excercise is random choose on from the muscle group excluding the random itself
+                if section.excercise.excercise  == Excercise.rndStr:
+                    excercises = Excercise.objects.filter(muscle_group=section.excercise.muscle_group).exclude(excercise=Excercise.rndStr)
+                    excercise = random.choice(excercises)
+                else:
+                    excercise = section.excercise
+                # Loop section by the number of sets    
                 for i in range(0, section.sets):
                     #Create Set object where foreign key is the related Workout
                     Set.objects.create(
                         workout = newWorkout,
-                        excercise = section.excercise
+                        excercise = excercise
                     )
             
         return True
