@@ -66,7 +66,7 @@ TEMPLATES = [
         #Add project folder for templates
         'DIRS': [
             'myproject/project/templates',
-            'myproject/frontend/build'
+            'myproject/frontend/build',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
