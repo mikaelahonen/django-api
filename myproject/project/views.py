@@ -18,7 +18,9 @@ import json
 # Create your views here.
 def index(request):
     path = os.path.join(settings.FRONT_DIR,'index.html')
-    return render(request, path)
+    f = open(path,'r')
+    html = f.read()
+    return HttpResponse(html)
     
 def index_2(request):
     path = os.path.join(settings.FRONT_DIR,'index-2.html')
