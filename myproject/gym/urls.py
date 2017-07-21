@@ -18,7 +18,13 @@ pk2 = '(?P<pk2>[0-9]+)'
 #URL patterns
 urlpatterns = [
 
+    url(r'^$',v.index, name="index"),
+    
     url(r'^muscle-groups$',v.muscleGroups, name="muscleGroups"),
+    
+    url(r'^api/workouts$',v.apiWorkouts, name="api-workouts"),
+    
+    url(r'^api/workouts2$',v.apiWorkouts2, name="api-workouts-2"),
     
     #PLAN
     url(r'^plan/list$',v.planList, name="plan-list"),

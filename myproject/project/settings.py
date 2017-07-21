@@ -16,7 +16,8 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-
+#Cutomized 13.7.2017
+FRONT_DIR = os.path.join(BASE_DIR, 'frontend','build')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -40,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     #Apps
     'gym',
+    'project',
     #django-bootstrap-form
     'bootstrapform',
     'widget_tweaks'
@@ -62,7 +64,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         #Add project folder for templates
-        'DIRS': ['myproject/project/templates'],
+        'DIRS': [
+            'myproject/project/templates',
+            'myproject/frontend/build'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'debug': True,
@@ -152,7 +157,10 @@ STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
+    #Regular static files project folder
     os.path.join(PROJECT_ROOT, 'static'),
+    #Static files from react build
+    os.path.join(FRONT_DIR, 'static'),
 )
 
 # Simplified static file serving.

@@ -35,7 +35,7 @@
 		<td>{{obj.id}}</td>
 		<td><a href="{% url 'gym:routine-section' obj.id %}">{{obj.name}}</a></td>
 		<td>{{obj.type}}</td>
-		<td><a href="{% url 'gym:routinesection-manage' obj.id %} ">{{ obj.routinesection__count }}</a></td>
+		<td><a href="{% url 'gym:routinesection-manage' obj.id %} ">{{ obj.section_set.count }}</a></td>
 		<td><a  class='btn btn-danger' href="{% url 'gym:routine-delete' obj.id %}">Delete</a></td>
 		<td><a  class='btn btn-primary' href="{% url 'gym:routine-update' obj.id %}">Update</a></td>
 		</tr>

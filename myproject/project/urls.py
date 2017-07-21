@@ -4,6 +4,7 @@ from django.contrib.auth import views as auth_views
 #admin.autodiscover()
 
 import gym.views
+import project.views
 
 # Examples:
 # url(r'^$', 'gettingstarted.views.home', name='home'),
@@ -15,8 +16,10 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     
     
-    url(r'^$', gym.views.index, name='index'),
+    url(r'^$', project.views.index, name='index'),
+    url(r'^2$',project.views.index_2, name="index-2"),
     url(r'^db', gym.views.db, name='db'),
     url(r'^gym/', include('gym.urls')),
+    url(r'^api/fetch-time$',project.views.fetchTime, name='fetch-time'),
 ]
 

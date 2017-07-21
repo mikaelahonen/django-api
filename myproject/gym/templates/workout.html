@@ -19,6 +19,7 @@
 		<tr>
 			<th>Id</th>
 			<th>Name</th>
+			<th>Sets</th>
 			<th>Start</th>
 			<th>End</th>
 			<th>Location</th>
@@ -30,6 +31,7 @@
 		<tr>
 			<td>{{obj.id}}</td>
 			<td><a href="{% url 'gym:workout-set-default' obj.id %}">{{obj.name}}</a></td>
+			<td>{{obj.set_set.count}}</td>
 			<td>{{obj.start_time}}</td>
 			<td>{{obj.end_time}}</td>
 			<td>{{obj.location }}</td>

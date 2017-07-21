@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.db.models import Count, F
 from django.views import generic
 from django.core.urlresolvers import reverse
+from django.core import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
@@ -26,12 +27,21 @@ from .forms import *
 
 hLink="<br><a href='/'>Back to home</a>"
 
+
+def apiWorkouts(request):
+    json = serializers.serialize("json", Workout.objects.all())
+    return HttpResponse(json)
+    
+def apiWorkouts2(request):
+    json = '[["id","color","size"],[1,"red","L"],[2,"green","M"]]'
+    return HttpResponse(json)
+
 @login_required
 
 # Create your views here.
 def index(request):
     # return HttpResponse('Hello from Python!')
-    return render(request, 'home.html')
+    return render(request, 'app.html')
 
 @login_required
 def db(request):

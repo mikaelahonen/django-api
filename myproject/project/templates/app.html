@@ -29,7 +29,7 @@
 	<script src="https://fb.me/react-15.0.1.js"></script>
     <script src="https://fb.me/react-dom-15.0.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/react-router/4.1.1/react-router.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/4.1.1/react-router-dom.min.js"></script>
 	
 	<!-- Fetch -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
@@ -92,34 +92,77 @@
 	  </div> <!-- End container fluid -->
 	</nav>
 
-	{% if img %}
-		<div class="head-img" style="background-image: url('{{img}}');">
-		</div>
-	{% endif %}
-
-	<div class="container">
-			<div class="row">
-				<div class="col-md-12">					
-					{% if head %}
-						<h1>{{head}}</h1>
-						<legend></legend>
-					{% endif %}
-					<div class="row">
-						{% block content %}{% endblock %}
-						<div id="react">
-							{% if props %}
-								<i class="fa fa-5x fa-lg fa-spinner fa-spin"></i>
-							{% endif %}
-						</div>							
-					</div>
-				</div>
-		</div>
+	<div class="container">		
+		<div id="render"></div>
 	</div>
 	
-	<!-- React script -->
-	<script>
-		window.props = {{props|json}}; 
-		window.reactId = document.getElementById('react');
+	
+	<script type="text/babel" src={% static 'components.js' %}></script>
+	
+	<script type="text/babel">
+		import Button from {% static 'components.js' %};
+		// For this demo, we are using the UMD build of react-router-dom
+		const {
+		  HashRouter,
+		  Switch,
+		  Route,
+		  Link
+		} = ReactRouterDOM
+
+		
+
+		const Home = () => (
+		  <div>
+			<h1>Welcome to the Tornadoes Website!</h1>
+		  </div>
+		  
+		)
+
+		// The Main component renders one of the three provided
+		// Routes (provided that one matches). Both the /roster
+		// and /schedule routes will match any pathname that starts
+		// with /roster or /schedule. The / route will only match
+		// when the pathname is exactly the string "/"
+		const Main = () => (
+		  <main>
+			<Switch>
+			  <Route exact path='/' component={Home}/>
+
+			</Switch>
+		  </main>
+		)
+
+		// The Header creates links that can be used to navigate
+		// between routes.
+		class Header extends React.Component {
+			render(){
+				return(
+				  <header>
+					<nav>
+					  <ul>
+						<li><Link to='/'>Home</Link></li>
+
+					  </ul>
+					</nav>
+				  </header>
+			  )
+		  }
+		}
+
+		class App extends React.Component {
+			render(){
+				return <div><Header /><Main /><Button/></div>;
+			}
+		}
+
+		// This demo uses a HashRouter instead of BrowserRouter
+		// because there is no server to match URLs
+		ReactDOM.render((
+		  <HashRouter>
+			<App />
+		  </HashRouter>
+		), document.getElementById('render'))
+
 	</script>
 	
 </body>
