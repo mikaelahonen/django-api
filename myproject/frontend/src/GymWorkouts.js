@@ -7,8 +7,11 @@ class WorkoutRow extends React.Component {
   render() {
     return (
       <tr>
-        <td>{this.props.workout.fields.name}</td>
-        <td>{this.props.workout.fields.location}</td>
+        <td>{this.props.workout.pk}</td>
+		<td>{this.props.workout.fields.name}</td>
+        <td>{this.props.workout.fields.start_time}</td>
+		<td>{this.props.workout.fields.end_time}</td>
+		<td>{this.props.workout.fields.location}</td>
       </tr>
     );
   }
@@ -18,15 +21,18 @@ class WorkoutTable extends React.Component {
   render() {
     var rows = [];
 	this.props.workouts.forEach(function(workout) {
-		rows.push(<WorkoutRow workout={workout} key={workout.fields.name} />);
+		rows.push(<WorkoutRow workout={workout} key={workout.pk} />);
 	});
     return (
 		<Col md="8">
 			<Table>
 				<thead>
 					<tr>
-					<th>Name</th>
-					<th>Price</th>
+						<th>Id</th>
+						<th>Workout</th>
+						<th>Start</th>
+						<th>End</th>
+						<th>Location</th>
 					</tr>
 				</thead>
 				<tbody>{rows}</tbody>
@@ -52,20 +58,39 @@ class Single extends React.Component {
 }
 
 class GymWorkouts extends React.Component {
-  render() {
-    return (
-      <div>
-        <Single />
-        <WorkoutTable workouts={WORKOUTS} />
-      </div>
-    );
-  }
+	getData() {
+		var data = fetch('/gym/api/workouts')
+		.then(response => response.json())
+		.then(json => {
+			console.log(json);
+			this.setState({data: json});			
+		});
+		console.log("Data: ", data);
+	}
+	constructor() {
+		super()
+		this.state = {data: undefined};
+	}
+	componentDidMount() {
+		this.getData();
+	}
+	render() {
+		var x = undefined;
+		if(this.state.data == undefined){
+			var x = <p>Waiting...</p>
+		}else{
+		var x = <WorkoutTable workouts={this.state.data} />
+		}
+		return (		
+		  <div>
+			<Single />			
+				{x}
+		  </div>
+		);
+	}
 }
 
 
-var WORKOUTS = [
-  {"model": "gym.workout", "pk": 2, "fields": {"name": "Chest + Bicep", "start_time": null, "end_time": null, "location": "Gym X"}}, 
-  {"model": "gym.workout", "pk": 3, "fields": {"name": "Back + Triceps", "start_time": null, "end_time": null, "location": "Gym X"}}
-];
+
  
 export default GymWorkouts;
