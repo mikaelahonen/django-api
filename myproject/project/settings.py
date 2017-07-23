@@ -161,6 +161,7 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
     #Static files from react build
     os.path.join(FRONT_DIR),
+    os.path.join(FRONT_DIR, 'static'),
 )
 
 # Simplified static file serving.
