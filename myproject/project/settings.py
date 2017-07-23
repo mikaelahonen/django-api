@@ -65,8 +65,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         #Add project folder for templates
         'DIRS': [
+            FRONT_DIR,
             'myproject/project/templates',
-            'myproject/frontend/build',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -160,7 +160,7 @@ STATICFILES_DIRS = (
     #Regular static files project folder
     os.path.join(PROJECT_ROOT, 'static'),
     #Static files from react build
-    os.path.join(FRONT_DIR, 'static'),
+    os.path.join(FRONT_DIR),
 )
 
 # Simplified static file serving.
