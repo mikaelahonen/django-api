@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Jumbotron, Grid, Row, Col, Table, FormControl } from 'react-bootstrap';
+import { Button, Jumbotron, Grid, Row, Col, Table, Form, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 import Head from './Components';
 
 
@@ -45,14 +45,39 @@ class WorkoutTable extends React.Component {
 class Single extends React.Component {
   render() {
     return (
-		<div>
-			<Head head="Gym Workouts"/>
+
+			
 			<Col md="4">
-				<form>
-					<FormControl type="text" placeholder="Search..." />
-				</form>
+				<Form>
+					<FormGroup>
+						<ControlLabel>Id</ControlLabel>
+						<FormControl type="text" disabled placeholder="1" />
+					</FormGroup>
+					<FormGroup>
+						<ControlLabel>Workout</ControlLabel>
+						<FormControl type="text" placeholder="Full body" />
+					</FormGroup>
+					<FormGroup>
+						<Row>
+							<Col sm={12}><ControlLabel>Start time</ControlLabel></Col>
+							<Col sm={6}><FormControl type="date"/></Col>
+							<Col sm={6}><FormControl type="time"/></Col>
+						</Row>
+					</FormGroup>
+					<FormGroup>
+						<Row>
+							<Col sm={12}><ControlLabel>End time</ControlLabel></Col>
+							<Col sm={6}><FormControl type="date"/></Col>
+							<Col sm={6}><FormControl type="time"/></Col>
+						</Row>
+					</FormGroup>
+					<FormGroup>
+						<ControlLabel>Location</ControlLabel>
+						<FormControl type="text" placeholder="My gym" />
+					</FormGroup>
+				</Form>
 			</Col>
-		</div>
+
     );
   }
 }
@@ -81,10 +106,14 @@ class GymWorkouts extends React.Component {
 		}else{
 		var x = <WorkoutTable workouts={this.state.data} />
 		}
-		return (		
+		return (
+			
 		  <div>
-			<Single />			
+			<Head head="Gym Workouts"/>
+			<Row>
+				<Single />			
 				{x}
+			</Row>
 		  </div>
 		);
 	}
