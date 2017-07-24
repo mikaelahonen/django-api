@@ -1,6 +1,5 @@
 //React
 import React, { Component } from 'react';
-//import logo from './logo.svg';
 import './style.css';
 //Bootstrap
 import { Button, Jumbotron, Grid, Row, Col } from 'react-bootstrap';

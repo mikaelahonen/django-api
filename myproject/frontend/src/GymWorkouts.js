@@ -1,81 +1,123 @@
 import React, { Component } from 'react';
-import { Button, Jumbotron, Grid, Row, Col, Table, Form, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
+import { Button, Jumbotron, Grid, Row, Col, Table, Form, FormControl, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
 import Head from './Components';
-
+import * as Api from './Api';
+import FontAwesome from  'react-fontawesome';
 
 class WorkoutRow extends React.Component {
-  render() {
-    return (
-      <tr>
-        <td>{this.props.workout.pk}</td>
-		<td>{this.props.workout.fields.name}</td>
-        <td>{this.props.workout.fields.start_time}</td>
-		<td>{this.props.workout.fields.end_time}</td>
-		<td>{this.props.workout.fields.location}</td>
-      </tr>
-    );
-  }
+	
+	constructor(props){
+		super(props);
+		this.handleClick = this.handleClick.bind(this);
+	}
+	
+	handleClick() {
+		console.log("Clicked item: ", this.props.workout.pk);
+	}
+
+	
+	render() {
+		return (
+			<tr onClick={this.handleClick} >
+				<td>{this.props.workout.pk}</td>
+				<td>{this.props.workout.fields.name}</td>
+				<td>{this.props.workout.fields.start_time}</td>
+				<td>{this.props.workout.fields.end_time}</td>
+				<td>{this.props.workout.fields.location}</td>
+			</tr>
+		);
+	}
 }
 
 class WorkoutTable extends React.Component {
-  render() {
-    var rows = [];
-	this.props.workouts.forEach(function(workout) {
-		rows.push(<WorkoutRow workout={workout} key={workout.pk} />);
-	});
-    return (
-		<Col md="8">
-			<Table>
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Workout</th>
-						<th>Start</th>
-						<th>End</th>
-						<th>Location</th>
-					</tr>
-				</thead>
-				<tbody>{rows}</tbody>
-			</Table>
-		</Col>
-    );
-  }
+	
+
+	
+	render() {
+		
+		if(this.props.workouts == undefined){
+			var rows = <FontAwesome name="circle-o-notch" size="3x" spin/>;
+		} else {
+			var rows = [];
+			this.props.workouts.forEach(function(workout) {
+			rows.push(<WorkoutRow workout={workout} key={workout.pk}/>);
+			});
+		}
+		
+		return (
+			<Col md="8">
+				<h2>All workouts</h2>
+				<Table hover>
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Workout</th>
+							<th>Start</th>
+							<th>End</th>
+							<th>Location</th>
+						</tr>
+					</thead>
+					<tbody>{rows}</tbody>
+				</Table>
+			</Col>
+		);
+		
+	}
 }
 
 class Single extends React.Component {
-  render() {
-    return (
-
-			
+	
+	handleSubmit(){
+		console.log("Submit");
+		
+	}
+	
+	render() {
+		
+	return (			
 			<Col md="4">
-				<Form>
+				<h2>Current workout</h2>
+				<form onSubmit={this.handleSubmit}>
+				
 					<FormGroup>
 						<ControlLabel>Id</ControlLabel>
-						<FormControl type="text" disabled placeholder="1" />
+						<FormControl id="id" type="text" disabled placeholder="1" />
 					</FormGroup>
+					
 					<FormGroup>
 						<ControlLabel>Workout</ControlLabel>
-						<FormControl type="text" placeholder="Full body" />
+						<FormControl id="workout" type="text" placeholder="Full body" />
 					</FormGroup>
+					
 					<FormGroup>
-						<Row>
-							<Col sm={12}><ControlLabel>Start time</ControlLabel></Col>
-							<Col sm={6}><FormControl type="date"/></Col>
-							<Col sm={6}><FormControl type="time"/></Col>
-						</Row>
+						<InputGroup>
+							<ControlLabel>Start time</ControlLabel>
+						</InputGroup>
+						<InputGroup>
+							<FormControl type="datetime-local"/>
+							<InputGroup.Button><Button>Now</Button></InputGroup.Button>
+						</InputGroup>
 					</FormGroup>
+					
 					<FormGroup>
-						<Row>
-							<Col sm={12}><ControlLabel>End time</ControlLabel></Col>
-							<Col sm={6}><FormControl type="date"/></Col>
-							<Col sm={6}><FormControl type="time"/></Col>
-						</Row>
+						<InputGroup>
+							<ControlLabel>End time</ControlLabel>
+						</InputGroup>
+						<InputGroup>
+							<FormControl type="datetime-local"/>
+							<InputGroup.Button><Button>Now</Button></InputGroup.Button>
+						</InputGroup>
 					</FormGroup>
+					
 					<FormGroup>
 						<ControlLabel>Location</ControlLabel>
 						<FormControl type="text" placeholder="My gym" />
 					</FormGroup>
-				</Form>
+					
+					<Button type="submit">
+						Submit
+					</Button>
+				</form>
 			</Col>
 
     );
@@ -83,6 +125,7 @@ class Single extends React.Component {
 }
 
 class GymWorkouts extends React.Component {
+	
 	getData() {
 		var data = fetch('/gym/api/workouts')
 		.then(response => response.json())
@@ -92,27 +135,24 @@ class GymWorkouts extends React.Component {
 		});
 		console.log("Data: ", data);
 	}
+	
 	constructor() {
 		super()
-		this.state = {data: undefined};
+		this.state = {
+			data: undefined
+		};
 	}
 	componentDidMount() {
 		this.getData();
 	}
 	render() {
-		var x = undefined;
-		if(this.state.data == undefined){
-			var x = <p>Waiting...</p>
-		}else{
-		var x = <WorkoutTable workouts={this.state.data} />
-		}
-		return (
-			
+		
+		return (			
 		  <div>
 			<Head head="Gym Workouts"/>
 			<Row>
 				<Single />			
-				{x}
+				<WorkoutTable workouts={this.state.data}/>
 			</Row>
 		  </div>
 		);
