@@ -17,7 +17,11 @@ urlpatterns = [
     
     
     url(r'^$', project.views.index, name='index'),
+    #This is needed in order to make Service worker find the cache
+    url(r'^index.html$', project.views.index, name='index-html'),
+    
     url(r'^2$',project.views.index_2, name="index-2"),
+    
     url(r'^db', gym.views.db, name='db'),
     url(r'^gym/', include('gym.urls')),
     url(r'^api/fetch-time$',project.views.fetchTime, name='fetch-time'),
