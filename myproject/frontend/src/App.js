@@ -18,7 +18,7 @@ class App extends Component {
 				<Menu/>				
 				<Grid>
 					<Row>
-						<Col md="12">
+						<Col md={12}>
 							<Switch>
 								<Route exact path='/' component={Home}/>
 								<Route path='/gym' component={Gym}/>

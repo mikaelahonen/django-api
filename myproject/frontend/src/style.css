@@ -21,3 +21,12 @@ body, html{
 .fa-spin{
 		margin: 20px;
 }
+
+.maps-container{
+	height: 500px;
+	margin: auto auto 100px auto;
+}
+
+.maps-element{
+	height: 500px;
+}
