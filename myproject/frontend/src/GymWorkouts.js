@@ -45,7 +45,7 @@ class WorkoutTable extends React.Component {
 		}
 		
 		return (
-			<Col md="8">
+			<Col md={8}>
 				<h2>All workouts</h2>
 				<Table hover>
 					<thead>
@@ -75,13 +75,13 @@ class Single extends React.Component {
 	render() {
 		
 	return (			
-			<Col md="4">
+			<Col md={4}>
 				<h2>Current workout</h2>
 				<form onSubmit={this.handleSubmit}>
 				
 					<FormGroup>
 						<ControlLabel>Id</ControlLabel>
-						<FormControl id="id" type="text" disabled placeholder="1" />
+						<FormControl id="id" type="text" disabled placeholder={1} />
 					</FormGroup>
 					
 					<FormGroup>

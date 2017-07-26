@@ -10,17 +10,35 @@ export class MapContainer extends Component {
 		lon: 0
 	}
 	
+	componentDidMount(){
+		var geoSuccess = function(pos){
+		console.log("Geolocation success in Google Maps Container");
+			this.setState({
+				lat: pos.coords.latitude,
+				lon: pos.coords.longitude,
+				acc: pos.coords.accuracy
+			});
+		}.bind(this);
+		navigator.geolocation.getCurrentPosition(geoSuccess);
+	}
+	
+	
 	render() {
+		console.log("Lat: ", this.state.lat)
 		return (
+				
 				<div className="maps-container">
-
 						<Map 
 							className= 'maps'
 							google={this.props.google} 
 							centerAroundCurrentLocation = {true}
 							zoom={8}>
 							
-							<Marker name={'Current'} />
+							
+							<Marker
+								title = {'You are here'}
+								name= {'Current location'}
+							/>
 							
 						</Map>
 	

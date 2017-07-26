@@ -10,7 +10,7 @@ class GeoLocation extends Component {
 	
 	componentWillMount(){
 		var geoSuccess = function(pos){
-			console.log("Geolocation success");
+			console.log("Geolocation component success");
 			this.setState({
 				lat: pos.coords.latitude,
 				lon: pos.coords.longitude,
