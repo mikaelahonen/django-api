@@ -23,11 +23,11 @@ class GeoLocation extends Component {
 	render(){
 		var coord = 0;
 		if (this.props.coord == "lat"){
-			coord = this.state.lat;
+			coord = this.state.lat.toFixed(3);
 		} else if (this.props.coord == "lon"){
-			coord = this.state.lon;
+			coord = this.state.lon.toFixed(3);
 		} else if (this.props.coord == "acc"){
-			coord = this.state.acc + " km";
+			coord = (this.state.acc/1000).toFixed(2) + " km";
 		}
 		return <div>{coord}</div>
 	}
