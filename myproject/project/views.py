@@ -4,8 +4,9 @@ from django.http import HttpResponse
 from django.db.models import Count, F
 from django.views import generic
 from django.core.urlresolvers import reverse
+
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required
+
 from rest_framework import viewsets
 from project.serializers import UserSerializer, GroupSerializer
 
