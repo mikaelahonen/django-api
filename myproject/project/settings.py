@@ -1,13 +1,3 @@
-"""
-Django settings for gettingstarted project, on Heroku. For more info, see:
-https://github.com/heroku/heroku-django-template
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.8/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.8/ref/settings/
-"""
 
 import os
 import dj_database_url
@@ -16,18 +6,14 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-#Cutomized 13.7.2017
-FRONT_DIR = os.path.join(BASE_DIR, 'frontend','build')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-# SECURITY WARNING: change this before deploying to production!
-#SECRET_KEY = 'i+acxn5(akgsn!sr4^qgf(^m&*@+g1@u^t@=8s@axc41ml*f=s'
-SECRET_KEY = 'qhbtNINsHpMsXBTW1AiulImp141pglEI6wa2AmON'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if 'PRODUCTION' in os.environ:
+	SECRET_KEY = os.environ['SECRET_KEY']
+	DEBUG = False
+else:
+	SECRET_KEY = 'qhbtNINsHpMsXBTW1AiulImp141pglEI6wa2AmON'
+	DEBUG = True
 
 
 # Application definition
@@ -42,9 +28,7 @@ INSTALLED_APPS = (
     #Apps
     'gym',
     'project',
-    #django-bootstrap-form
-    'bootstrapform',
-    'widget_tweaks'
+	'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -65,7 +49,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         #Add project folder for templates
         'DIRS': [
-            FRONT_DIR,
             'myproject/project/templates',
         ],
         'APP_DIRS': True,
@@ -159,9 +142,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     #Regular static files project folder
     os.path.join(PROJECT_ROOT, 'static'),
-    #Static files from react build
-    os.path.join(FRONT_DIR),
-    os.path.join(FRONT_DIR, 'static'),
 )
 
 # Simplified static file serving.
@@ -171,3 +151,13 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 #Added by myself 16.4.2017
 LOGIN_REDIRECT_URL = '/'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}

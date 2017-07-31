@@ -4,8 +4,10 @@ from django.http import HttpResponse
 from django.db.models import Count, F
 from django.views import generic
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets
+from project.serializers import UserSerializer, GroupSerializer
 
 #Get base directory from settings
 from project import settings
@@ -17,20 +19,22 @@ import json
 
 # Create your views here.
 def index(request):
-    path = os.path.join(settings.FRONT_DIR,'index.html')
-    f = open(path,'r')
-    html = f.read()
-    return HttpResponse(html)
+    x = 'Hello world!'
+    return HttpResponse(x)
+	
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
     
-def index_2(request):
-    path = os.path.join(settings.FRONT_DIR,'index-2.html')
-    return render(request, path)
-    
-def fetchTime(request):
-    t = dt.datetime.now().strftime("%I:%M:%S %d.%m.%Y")
-    jsonStr = {
-        'time': t
-    }
-    jsonStr = json.dumps(jsonStr)
-    return HttpResponse(jsonStr)
     

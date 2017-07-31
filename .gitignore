@@ -4,6 +4,7 @@
 # Virtual environments
 myenv34/*
 myenv/*
+venv/*
 
 # Heroku
 Procfile
