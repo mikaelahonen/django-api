@@ -21,12 +21,12 @@ router.register(r'groups', project.views.GroupViewSet)
 router.register(r'gym/workouts', gym.views.WorkoutViewSet)
 
 #Other urls
-urlpatterns = [
-    url(r'^', include(router.urls)),
+urlpatterns = router.urls
+urlpatterns += [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 	url(r'^api-token-auth/', obtain_jwt_token),
-    url(r'^admin/', include(admin.site.urls)),       
+    url(r'^admin/', include(admin.site.urls)),
+	url(r'^test',project.views.test),
 ]
 
 
-urlpatterns += router.urls

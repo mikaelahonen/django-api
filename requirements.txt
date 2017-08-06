@@ -8,3 +8,4 @@ PyYAML==3.11
 bleach==2.0.0
 djangorestframework==3.6.3
 djangorestframework-jwt==1.11.0
+django-cors-headers==2.1.0

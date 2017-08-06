@@ -1,5 +1,6 @@
 
 import os
+import datetime
 import dj_database_url
 
 
@@ -29,9 +30,11 @@ INSTALLED_APPS = (
     'gym',
     'project',
 	'rest_framework',
+	'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
+	'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -161,3 +164,12 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
+JWT_AUTH = {
+	'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=900),
+}
+
+CORS_ORIGIN_WHITELIST = (
+    'app.mikaelahonen.com',
+    'localhost:3000',
+)
