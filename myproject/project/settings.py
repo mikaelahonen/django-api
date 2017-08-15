@@ -166,10 +166,11 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
-	'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=900),
+	'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3600),
 }
 
 CORS_ORIGIN_WHITELIST = (
     'app.mikaelahonen.com',
     'localhost:3000',
+	'37.219.204.47',
 )
