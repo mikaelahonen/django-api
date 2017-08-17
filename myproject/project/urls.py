@@ -5,10 +5,14 @@ from django.contrib.auth import views as auth_views
 
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework.schemas import get_schema_view
 
 #Views
 import project.views
 import gym.views
+
+#Schema
+schema_view = get_schema_view(title='Pastebin API')
 
 #Default route
 router = routers.DefaultRouter()
@@ -30,6 +34,7 @@ urlpatterns += [
 	url(r'^api-token-auth/', obtain_jwt_token),
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^test',project.views.test),
+	url(r'^schema/$', schema_view),
 ]
 
 
