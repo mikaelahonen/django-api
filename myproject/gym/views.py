@@ -8,7 +8,7 @@ from django.core import serializers
 from django.contrib.auth.models import User
 
 from rest_framework import viewsets
-from gym.serializers import WorkoutSerializer
+from gym.serializers import *
 
 #Python libraries
 import datetime as dt
@@ -23,3 +23,24 @@ class WorkoutViewSet(viewsets.ModelViewSet):
     """
     queryset = Workout.objects.all().order_by('-id')
     serializer_class = WorkoutSerializer
+	
+class SetViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Set.objects.all().order_by('-id')
+    serializer_class = SetSerializer
+	
+class ExcerciseViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Excercise.objects.all().order_by('-id')
+    serializer_class = ExcerciseSerializer
+	
+class MuscleGroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = MuscleGroup.objects.all().order_by('-id')
+    serializer_class = MuscleGroupSerializer
