@@ -197,6 +197,7 @@ class Set(models.Model):
         Workout,
         on_delete = models.SET_NULL,
         null = True,
+		related_name = 'sets',
     )
     reps = models.IntegerField(
         default = None,
