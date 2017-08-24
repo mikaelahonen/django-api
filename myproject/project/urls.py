@@ -27,6 +27,7 @@ router.register(r'gym/sets', gym.views.SetViewSet)
 router.register(r'gym/excercises', gym.views.ExcerciseViewSet)
 router.register(r'gym/musclegroups', gym.views.MuscleGroupViewSet)
 
+
 #Other urls
 urlpatterns = router.urls
 urlpatterns += [

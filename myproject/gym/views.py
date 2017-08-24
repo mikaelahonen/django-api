@@ -6,7 +6,7 @@ from django.views import generic
 from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.contrib.auth.models import User
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -19,12 +19,20 @@ import json
 # Import models and forms
 from .models import *
 
+#Viewsets http://www.django-rest-framework.org/api-guide/viewsets/
+
 class WorkoutViewSet(viewsets.ModelViewSet):
 	"""
 	API endpoint that allows users to be viewed or edited.
 	"""
 	queryset = Workout.objects.all().order_by('-id')
 	serializer_class = WorkoutSerializer
+	
+	def retrieve(self, request, pk=None):
+		queryset = Workout.objects.all()
+		workout = get_object_or_404(queryset, pk=pk)
+		serializer = WorkoutSetsSerializer(workout)
+		return Response(serializer.data)
 	
 class SetViewSet(viewsets.ModelViewSet):
 	"""

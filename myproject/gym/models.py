@@ -197,7 +197,7 @@ class Set(models.Model):
         Workout,
         on_delete = models.SET_NULL,
         null = True,
-		related_name = 'sets',
+        related_name = 'sets',
     )
     reps = models.IntegerField(
         default = None,
@@ -207,7 +207,12 @@ class Set(models.Model):
         default = None,
         null = True,
     )
-    
+    def __str__(self):
+        wo = self.workout.name
+        e = self.excercise.excercise
+        r = str(self.reps)
+        w = str(self.weight)
+        return wo + ': ' + e + ' ' + r + 'x' + w
         
 
     
