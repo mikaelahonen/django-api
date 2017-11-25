@@ -38,8 +38,31 @@ class SetViewSet(viewsets.ModelViewSet):
 	"""
 	API endpoint that allows users to be viewed or edited.
 	"""
-	queryset = Set.objects.all().order_by('-id')
+	
 	serializer_class = SetSerializer
+	queryset = Set.objects.all().order_by('workout_rank')
+	
+	#Override the list method
+	def list(self, request):
+	
+		#Get current user
+		user = self.request.user
+		#Get workout parameter from URL
+		workout = self.request.query_params.get('workout', None)
+		
+		#All objects
+		queryset = Set.objects.all()
+		#Filter by workout parameter
+		if(workout is not None):
+			queryset = queryset.filter(workout__id=workout)
+		#Filter by current user
+		queryset = queryset.filter(user=user.id)
+		#Sort
+		queryset = queryset.order_by('workout_rank')
+		
+		#many=True: get or post multiple items at once
+		serializer = SetSerializer(queryset, many=True)		
+		return Response(serializer.data)
 	
 class ExcerciseViewSet(viewsets.ModelViewSet):
 	"""

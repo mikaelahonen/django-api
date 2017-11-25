@@ -43,6 +43,7 @@ class WorkoutSerializer(serializers.ModelSerializer):
 
 
 class ExcerciseSerializer(serializers.ModelSerializer):
+
 	class Meta:
 		model = Excercise
 		fields = ('id','excercise','muscle_group','lever','mass_share')
@@ -50,12 +51,27 @@ class ExcerciseSerializer(serializers.ModelSerializer):
 class SetSerializer(serializers.ModelSerializer):
 	
 	#Example
-	excercise_obj = ExcerciseSerializer(source='excercise')
+	#excercise = ExcerciseSerializer()	
+	#add 'excercise_obj' to fields
 	
+	#Override excercise id to default excercise name
+	
+	excercise_name = serializers.SerializerMethodField()
+	muscle_group_name = serializers.SerializerMethodField()
+	workout_name = serializers.SerializerMethodField()
+	
+	def get_workout_name(self, obj):
+		return obj.workout.name
+	
+	def get_excercise_name(self, obj):
+		return obj.excercise.excercise
+		
+	def get_muscle_group_name(self, obj):
+		return obj.excercise.muscle_group.muscle_group
 	
 	class Meta:
 		model = Set
-		fields = ('id','workout','excercise_obj','reps','weight') #'excercise
+		fields = ('id','workout_rank','workout','workout_name','reps','weight','excercise','excercise_name','muscle_group_name','user') #'excercise
 		depth = 0
 	
 	#Example
@@ -63,7 +79,8 @@ class SetSerializer(serializers.ModelSerializer):
 		pair = {"url":"http://asd.com"}
 		jsonStr = json.dumps(pair)
 		return obj.excercise.id
-
+		
+		
 class MuscleGroupSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = MuscleGroup
@@ -73,7 +90,9 @@ class MuscleGroupSerializer(serializers.ModelSerializer):
 #Return a single workout together with all related sets		
 class WorkoutSetsSerializer(serializers.ModelSerializer):
 
-	sets = SetSerializer(many=True, read_only=True)
+	#Show all details from sets as sub array
+	#sets = SetSerializer(many=True, read_only=True)
+	
 	next_id = serializers.SerializerMethodField(read_only=True)
 	prev_id = serializers.SerializerMethodField(read_only=True)
 	
