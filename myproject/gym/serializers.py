@@ -33,14 +33,6 @@ def get_prev(object, model):
 		prevId = prevObj.id
 	return prevId
 
-class WorkoutSerializer(serializers.ModelSerializer):
-	
-	sets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-	
-	class Meta:
-		model = Workout
-		fields = ('id','name','start_time','end_time','location','sets')
-
 
 class ExcerciseSerializer(serializers.ModelSerializer):
 
@@ -59,6 +51,7 @@ class SetSerializer(serializers.ModelSerializer):
 	excercise_name = serializers.SerializerMethodField()
 	muscle_group_name = serializers.SerializerMethodField()
 	workout_name = serializers.SerializerMethodField()
+	one_rep_max = serializers.SerializerMethodField()
 	
 	def get_workout_name(self, obj):
 		return obj.workout.name
@@ -68,10 +61,15 @@ class SetSerializer(serializers.ModelSerializer):
 		
 	def get_muscle_group_name(self, obj):
 		return obj.excercise.muscle_group.muscle_group
+		
+	def get_one_rep_max(self, obj):
+		if(obj.reps is not None and obj.weight is not None):
+			one_rep_max = 36/(37-obj.reps)*obj.weight
+		return round(one_rep_max,1)
 	
 	class Meta:
 		model = Set
-		fields = ('id','workout_rank','workout','workout_name','reps','weight','excercise','excercise_name','muscle_group_name','user') #'excercise
+		fields = ('id','workout_order','workout','workout_name','reps','weight','one_rep_max','done','excercise','excercise_name','muscle_group_name','user') #'excercise
 		depth = 0
 	
 	#Example
@@ -88,21 +86,39 @@ class MuscleGroupSerializer(serializers.ModelSerializer):
 
 
 #Return a single workout together with all related sets		
-class WorkoutSetsSerializer(serializers.ModelSerializer):
+class WorkoutSerializer(serializers.ModelSerializer):
 
 	#Show all details from sets as sub array
 	#sets = SetSerializer(many=True, read_only=True)
 	
 	next_id = serializers.SerializerMethodField(read_only=True)
 	prev_id = serializers.SerializerMethodField(read_only=True)
+	active_set = serializers.SerializerMethodField()
+	#sets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+	
 	
 	class Meta:
 		model = Workout
-		fields = ('id','name','start_time','end_time','location','sets','prev_id', 'next_id')
+		fields = ('id','name','start_time','end_time','location','active_set','sets','prev_id', 'next_id')
 		
 	def get_next_id(self, obj):
 		return get_next(obj, Workout)
 		
 	def get_prev_id(self, obj):
 		return get_prev(obj, Workout)
+	
+	def get_active_set(self, obj):
+		#Filter to undone sets in this workout
+		workout_sets = Set.objects.filter(workout=obj).filter(done=0)
+		#Get the workout with lowest workout order
+		workout_sets = workout_sets.order_by('workout_order')
+		
+		#If there are no sets
+		if(len(workout_sets) == 0):
+			active_set = None
+		#At least one set
+		else:
+			active_set = workout_sets[0].id
+
+		return active_set
 

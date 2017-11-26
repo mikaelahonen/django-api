@@ -28,11 +28,20 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 	queryset = Workout.objects.all().order_by('-id')
 	serializer_class = WorkoutSerializer
 	
-	def retrieve(self, request, pk=None):
+	def list(self, request):
+		#All objects
 		queryset = Workout.objects.all()
-		workout = get_object_or_404(queryset, pk=pk)
-		serializer = WorkoutSetsSerializer(workout)
+		#Filter by current user
+		queryset = queryset.filter(user=self.request.user)
+		#Sort
+		queryset = queryset.order_by('-id')
+		
+		#many=True: get or post multiple items at once
+		serializer = WorkoutSerializer(queryset, many=True)		
 		return Response(serializer.data)
+	
+	#def retrieve(self, request, pk=None):
+
 	
 class SetViewSet(viewsets.ModelViewSet):
 	"""
@@ -40,13 +49,11 @@ class SetViewSet(viewsets.ModelViewSet):
 	"""
 	
 	serializer_class = SetSerializer
-	queryset = Set.objects.all().order_by('workout_rank')
+	queryset = Set.objects.all().order_by('workout_order')
 	
 	#Override the list method
 	def list(self, request):
 	
-		#Get current user
-		user = self.request.user
 		#Get workout parameter from URL
 		workout = self.request.query_params.get('workout', None)
 		
@@ -56,10 +63,10 @@ class SetViewSet(viewsets.ModelViewSet):
 		if(workout is not None):
 			queryset = queryset.filter(workout__id=workout)
 		#Filter by current user
-		queryset = queryset.filter(user=user.id)
+		queryset = queryset.filter(user=self.request.user)
 		#Sort
-		queryset = queryset.order_by('workout_rank')
-		
+		queryset = queryset.order_by('-done', 'workout_order')
+	
 		#many=True: get or post multiple items at once
 		serializer = SetSerializer(queryset, many=True)		
 		return Response(serializer.data)

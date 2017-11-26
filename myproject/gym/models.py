@@ -28,17 +28,20 @@ class Excercise(models.Model):
 		MuscleGroup,
 		on_delete = models.SET_NULL,
 		blank = True,
-		null = True,)
+		null = True,
+	)
 	#Distance from movement axis in meters
 	lever = models.DecimalField(
 		max_digits=3,
 		decimal_places=2,
-		null=True)
+		null=True
+	)
 	#Portion of body mass moving in the excercise  
 	mass_share = models.DecimalField(
 		max_digits=5,
 		decimal_places=2,
-		null=True)
+		null=True
+	)
 	
 	def __str__(self):
 		return self.excercise
@@ -213,10 +216,13 @@ class Set(models.Model):
 		default = None,
 		null = True,
 	)
-	#The rank inside the workout
-	workout_rank = models.IntegerField(
+	#The oreder index of the set inside the workout
+	workout_order = models.IntegerField(
 		default = None,
 		null = True,
+	)
+	done = models.BooleanField(
+		default = 0,
 	)
 	user = models.ForeignKey(
 		User,
