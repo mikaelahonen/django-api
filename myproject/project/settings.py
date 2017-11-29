@@ -163,14 +163,15 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+	#'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
+	'DEFAULT_METADATA_CLASS': 'project.core.MinimalMetadata',
 }
 
 JWT_AUTH = {
-	'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3600),
+	'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=36000),
 }
 
 CORS_ORIGIN_WHITELIST = (
     'app.mikaelahonen.com',
     'localhost:3000',
-	'37.219.204.47',
 )

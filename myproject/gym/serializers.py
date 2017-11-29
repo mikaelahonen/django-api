@@ -36,9 +36,14 @@ def get_prev(object, model):
 
 class ExcerciseSerializer(serializers.ModelSerializer):
 
+	muscle_group_name = serializers.SerializerMethodField()
+
+	def get_muscle_group_name(self, obj):
+		return obj.muscle_group.muscle_group
+
 	class Meta:
 		model = Excercise
-		fields = ('id','excercise','muscle_group','lever','mass_share')
+		fields = ('id','excercise','muscle_group','muscle_group_name','lever','mass_share')
 		
 class SetSerializer(serializers.ModelSerializer):
 	
@@ -52,9 +57,19 @@ class SetSerializer(serializers.ModelSerializer):
 	muscle_group_name = serializers.SerializerMethodField()
 	workout_name = serializers.SerializerMethodField()
 	one_rep_max = serializers.SerializerMethodField()
+	workout_date = serializers.SerializerMethodField()
 	
 	def get_workout_name(self, obj):
-		return obj.workout.name
+		if(obj.workout is None):
+			return None
+		else:
+			return obj.workout.name
+	
+	def get_workout_date(self, obj):
+		if(obj.workout is None):
+			return None
+		else:
+			return obj.workout.start_time
 	
 	def get_excercise_name(self, obj):
 		return obj.excercise.excercise
@@ -63,13 +78,21 @@ class SetSerializer(serializers.ModelSerializer):
 		return obj.excercise.muscle_group.muscle_group
 		
 	def get_one_rep_max(self, obj):
-		if(obj.reps is not None and obj.weight is not None):
-			one_rep_max = 36/(37-obj.reps)*obj.weight
-		return round(one_rep_max,1)
+	
+		#Make sure repetitions is not None or 0
+		if(obj.reps is not None and obj.reps!=0):
+			if(obj.weight is not None and obj.weight!=0):
+				one_rep_max = 36/(37-obj.reps)*obj.weight
+			else:
+				one_rep_max = obj.reps
+		else:
+			one_rep_max = 0
+			
+		return round(one_rep_max, 1)
 	
 	class Meta:
 		model = Set
-		fields = ('id','workout_order','workout','workout_name','reps','weight','one_rep_max','done','excercise','excercise_name','muscle_group_name','user') #'excercise
+		fields = ('id','workout_order','workout','workout_date','workout_name','reps','weight','one_rep_max','done','excercise','excercise_name','muscle_group_name','user','comments') #'excercise
 		depth = 0
 	
 	#Example
@@ -121,4 +144,20 @@ class WorkoutSerializer(serializers.ModelSerializer):
 			active_set = workout_sets[0].id
 
 		return active_set
+		
+class RoutineSerializer(serializers.ModelSerializer):
 
+	section_count = serializers.SerializerMethodField(read_only=True)
+	
+	def get_section_count(self, obj):
+		section_list = Section.objects.filter(routine=obj)
+		if(section_list is None):
+			section_count = 0
+		else:
+			section_count = len(section_list)
+		return section_count	
+
+
+	class Meta:
+		model = Routine
+		fields = ('id','name','plan','type','comments','section_count')
