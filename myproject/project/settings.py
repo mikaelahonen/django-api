@@ -137,7 +137,6 @@ ALLOWED_HOSTS = ['*']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-
 STATIC_ROOT = os.path.join(BASE_DIR, "..", "static")
 STATIC_URL = '/static/'
 
@@ -152,7 +151,8 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 #Added by myself 16.4.2017
-LOGIN_REDIRECT_URL = '/'
+#Edited 3.12.2017
+LOGIN_REDIRECT_URL = '/gym/workouts'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (

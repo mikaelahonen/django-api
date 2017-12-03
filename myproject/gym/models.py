@@ -114,7 +114,8 @@ class Routine(models.Model):
 		return self.name
 		
 
-# A Section of a Routine
+# A Section of a Routine is a building block of an routine.
+# It has to be a single excercise.
 # A Section is pointed to a specific routine
 class Section(models.Model):
 	#Sort key for section in the routine
@@ -155,7 +156,7 @@ class Section(models.Model):
 		on_delete = models.CASCADE
 	)
 	def __str__(self):
-		if(self.random):
+		if(self.random_excercise):
 			if(self.muscle_group is not None):
 				e = self.muscle_group.muscle_group
 			else:

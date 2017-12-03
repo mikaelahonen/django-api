@@ -1,31 +1,63 @@
 # Import models
 from gym.models import *
+#Pandas and NumPy
+import numpy as np
+import pandas as pd
 
-#Takes and routine object as an argument.
-#Returns the list of set indexes.
+
+#Creates sets from routine and returns the list of sets
+#More details about routine types in models.py file
 def _create_routine_sets(workout, routine, user):
+
+	#Get excercise list
+	excercises = Excercise.objects.values('id','muscle_group_id')
+	df_excercises = pd.DataFrame(list(excercises))
+	df_excercises.columns = ['excercise_id', 'muscle_group_id']	
+	#Create column for randomized order
+	df_excercises['random_order'] = df_excercises.sample(frac=1).index	
+	#Set partition index for muscle group
+	df_excercises['mg_order'] = df_excercises.groupby("muscle_group_id")['random_order'].rank(method="dense").astype('int64')
 	
-	#Create sets by sections
-	section_list = Section.objects.filter(routine=routine.id)
-	for section in section_list:
-		#Get the excercise of this section
-		if(section.random):
-			excercises = Excercise.objects.filter(muscle_group=section.excercise.muscle_group)
-			excercise = random.choice(excercises)
-		else:
-			excercise = section.excercise
-			
-		# Create the specified number of sections	
-		for i in range(0, section.sets):
-			#Create Set object where foreign key is the related Workout
-			Set.objects.create(
-				workout = workout,
-				excercise = excercise,
-				user = user,
-				#reps = section.target
-			)
 	
-	sets = [1,2,3]
+	#Get sections as values for the routine
+	sections = Section.objects.filter(routine=routine.id).order_by('index').values()	
+	#Initialize section data frame
+	df_sections = pd.DataFrame(list(sections))
+	df_sections['section_rank'] = df_sections.index
+	df_sections['mg_order'] = df_sections.groupby("muscle_group_id")['section_rank'].rank(method="dense").astype('int64')
+	
+	#Combine excercises by the random key
+	df_sections = pd.merge(df_sections, df_excercises, left_on=['muscle_group_id', 'mg_order'], right_on=['muscle_group_id', 'mg_order'], how='left')	
+	#Create excercise column
+	df_sections['excercise_id'] = np.where(df_sections['random_excercise'], df_sections['excercise_id_y'], df_sections['excercise_id_x'])
+	df_sections
+	
+	#if(routine.type = 'EF'):	
+	#Copy rows by the number of times defined in section's sets column
+	df_sets = df_sections.loc[np.repeat(df_sections.index.values, df_sections.sets)]
+	#Reset index
+	df_sets = df_sets.reset_index(drop=True)
+	#Create new index column for sets 
+	df_sets['workout_order'] = df_sets.index + 1
+	
+	#if(routine.type = 'SF'):
+	
+	#if(routine.type = 'AT'):
+		
+		
+	#Create empty list to save sets
+	sets = []
+	#Iterate over sets data frame
+	for index, row in df_sets.iterrows():
+		set = Set.objects.create(
+			workout = workout,
+			excercise_id = row['excercise_id'],			
+			workout_order = row['workout_order'],
+			user = user,
+			#reps = section.target,
+		)
+		sets.append(set)
+	
 	return sets
 	
 def _create_routine_workout(routine, user):		
