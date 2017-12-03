@@ -1,23 +1,17 @@
 #Import django libraries
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from django.db.models import Count, F
-from django.views import generic
-from django.core.urlresolvers import reverse
+from django.db.models import F
 from django.core import serializers
 from django.contrib.auth.models import User
-
-from gym.functions import routineStart
-
+#Import DRF libraries
 from rest_framework.decorators import detail_route
 from rest_framework import viewsets
 from rest_framework.response import Response
+#Import app specific libraries
 from gym.serializers import *
-
-#Python libraries
+from gym.functions import routine_start
+#Import Python libraries
 import datetime as dt
 import json
-
 # Import models and forms
 from .models import *
 
@@ -35,8 +29,8 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 		queryset = Workout.objects.all()
 		#Filter by current user
 		queryset = queryset.filter(user=self.request.user)
-		#Sort
-		queryset = queryset.order_by('-id')
+		#Sort. F() allows setting nulls to last
+		queryset = queryset.order_by('-id').order_by(F("start_time").desc(nulls_last=True))
 		
 		#many=True: get or post multiple items at once
 		serializer = WorkoutSerializer(queryset, many=True)		
@@ -95,12 +89,12 @@ class RoutineViewSet(viewsets.ModelViewSet):
 	queryset = Routine.objects.all().order_by('-id')
 	serializer_class = RoutineSerializer
 	
-	#Route to start the Routine
+	#Route to start a Routine
 	@detail_route(methods=['post'])
 	def start(self, request, pk=None):
 		routine = Routine.objects.get(id=pk)
 		user = self.request.user
-		response = routineStart(routine, user)
+		response = routine_start(routine, user)
 		return Response(response)
 	
 class MuscleGroupViewSet(viewsets.ModelViewSet):

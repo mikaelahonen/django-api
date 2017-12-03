@@ -80,10 +80,21 @@ class Plan(models.Model):
 #Routine is a template for workout
 class Routine(models.Model):
 	TYPE_CHOICES = (
-		('SS','Superset'), #Change between two exercises
-		('SF','Set first'), #Execute first set from each excercise first
-		('EF','Excercise first'), #Execute the first excercise before moving to next
-		('','Excercise first'), #Execute the first excercise before moving to next
+	
+		#Excercise First. Execute the first excercise before moving to next.
+		#This is the natural order according to the index.
+		('EF','Excercise first'),
+		
+		#Set First. Execute first set from each excercise first.		
+		('SF','Set first'), 
+		
+		#Alternate Two. Switch between two exercises.
+		#If the number of excercices is odd, one excercice will be done last.
+		('AT','Alternate two'), 
+		
+		#Random order. Generate all sets and make the order random.
+		('RO','Random order'),
+		
 	)
 	name = models.CharField(
 		max_length = 100,
@@ -93,7 +104,7 @@ class Routine(models.Model):
 	)
 	type = models.CharField(
 		choices=TYPE_CHOICES,
-		default='EF',
+		default='AT',
 		max_length=2,
 	)
 	comments = models.TextField(
@@ -125,7 +136,7 @@ class Section(models.Model):
 		on_delete = models.SET_NULL,
 		null = True,
 	)
-	random = models.BooleanField(
+	random_excercise = models.BooleanField(
 		default = True
 	)
 	#How many sets to do
@@ -135,6 +146,9 @@ class Section(models.Model):
 	#Target repetitions
 	target = models.IntegerField(
 		default = 10,
+	)
+	random_target = models.BooleanField(
+		default = True
 	)
 	routine = models.ForeignKey(
 		Routine,

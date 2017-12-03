@@ -23,8 +23,23 @@ Show selected migration file
 
 `python manage.py sqlmigrate gym 0001`
 
+## Pip
+
+
+
+### Erros
+ImportError: No module named 'functions'
+Try to change `from my_python_file.py import *` to `from app.my_python_file.py import *`
+
+`Error: Microsoft Visual C++ 10.0 is required` or Cython error. 
+Latest pandas package 0.21.0 was not suitable with Python 3.4.
+I downgraded to pandas 0.20.3.
+
+
+
+
 ## About serveless tech
-This solutions is deployed on Linux server.
+This solutions is deployed on normal Linux server.
 According to my investigation here are some ideas about 
 serverless technologies on AWS.
 

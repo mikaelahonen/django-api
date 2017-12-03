@@ -1,37 +1,10 @@
 from gym.models import *
 from rest_framework import serializers
 import json
+from gym.functions import *
 
 #Relations
 #http://www.django-rest-framework.org/api-guide/relations/#serializer-relations
-
-def get_next(object, model):
-	id = object.id
-	all = model.objects.all()
-	#Find greater than
-	gt = all.filter(id__gt=id).order_by('id')
-	if(len(gt)==0):
-		#If no bigger ids exist, take the first id
-		firstObj = all.order_by('id')[0]
-		nextId = firstObj.id
-	else:
-		nextObj = gt[0]
-		nextId = nextObj.id
-	return nextId
-		
-def get_prev(object, model):
-	id = object.id
-	all = model.objects.all() 
-	#Find less than
-	lt = all.filter(id__lt=id).order_by('-id')
-	if(len(lt)==0):
-		#If no smaller ids exist, take the last id
-		lastObj = all.order_by('-id')[0]
-		prevId = lastObj.id 
-	else:
-		prevObj = lt[0]
-		prevId = prevObj.id
-	return prevId
 
 
 class ExcerciseSerializer(serializers.ModelSerializer):
@@ -77,18 +50,10 @@ class SetSerializer(serializers.ModelSerializer):
 	def get_muscle_group_name(self, obj):
 		return obj.excercise.muscle_group.muscle_group
 		
-	def get_one_rep_max(self, obj):
-	
-		#Make sure repetitions is not None or 0
-		if(obj.reps is not None and obj.reps!=0):
-			if(obj.weight is not None and obj.weight!=0):
-				one_rep_max = 36/(37-obj.reps)*obj.weight
-			else:
-				one_rep_max = obj.reps
-		else:
-			one_rep_max = 0
-			
-		return round(one_rep_max, 1)
+	def get_one_rep_max(self, obj):	
+		orp = one_rep_max(obj.reps, obj.weight)
+		orp = round(orp, 1)		
+		return orp
 	
 	class Meta:
 		model = Set
