@@ -5,6 +5,31 @@ Updates from this github repo will be automatically built by Jenkins and deploye
 
 The purpose is to learn smart development practices as well as trying to apply machine learning algorithms to my self leadership sofware.
 
+## AWS Elastic beanstalk
+
+### Errors
+
+#### Old pip version
+These lines occured after an attempt to install
+the app to elastic beanstalk.
+
+`You are using pip version 7.1.2, however version 9.0.1 is available.`
+`Your requirements.txt is invalid`
+
+The problem was old version of `pip`.
+This probably because I included `pandas` to my packages.
+
+I added these lines to my `.ebextensions` file and it worked:
+```YAML
+commands:
+  pip_upgrade:
+    command: /opt/python/run/venv/bin/pip install --upgrade pip
+    ignoreErrors: false
+```
+
+The error was also fixed by upgrading elastic beanstalk machine to
+`64bit Amazon Linux 2017.09 v2.6.0 running Python 3.4` version.
+	
 ## Django ORM
 Django object relational mapping notes.
 

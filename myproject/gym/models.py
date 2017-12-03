@@ -233,6 +233,7 @@ class Set(models.Model):
 	)
 	comments = models.TextField(
 		default = "",
+		blank = True,
 	)
 	
 	def __str__(self):
