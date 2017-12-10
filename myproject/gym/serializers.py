@@ -5,9 +5,27 @@ from gym.functions import *
 
 #Relations
 #http://www.django-rest-framework.org/api-guide/relations/#serializer-relations
+class MyModelSerializer(serializers.ModelSerializer):
+    """
+    A ModelSerializer that takes an additional `fields` argument that
+    controls which fields should be displayed.
+    """
 
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
 
-class ExcerciseSerializer(serializers.ModelSerializer):
+        # Instantiate the superclass normally
+        super(MyModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields.keys())
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+class ExcerciseSerializer(MyModelSerializer):
 
 	muscle_group_name = serializers.SerializerMethodField()
 
@@ -31,6 +49,10 @@ class SetSerializer(serializers.ModelSerializer):
 	workout_name = serializers.SerializerMethodField()
 	one_rep_max = serializers.SerializerMethodField()
 	workout_date = serializers.SerializerMethodField()
+	user = serializers.PrimaryKeyRelatedField(
+	    read_only=True,
+	    default=serializers.CurrentUserDefault(),
+	)
 
 	def get_workout_name(self, obj):
 		if(obj.workout is None):
@@ -74,7 +96,7 @@ class MuscleGroupSerializer(serializers.ModelSerializer):
 
 
 #Return a single workout together with all related sets
-class WorkoutSerializer(serializers.ModelSerializer):
+class WorkoutSerializer(MyModelSerializer):
 
 	#Show all details from sets as sub array
 	#sets = SetSerializer(many=True, read_only=True)
@@ -131,6 +153,7 @@ class WorkoutSerializer(serializers.ModelSerializer):
 class RoutineSerializer(serializers.ModelSerializer):
 
 	section_count = serializers.SerializerMethodField(read_only=True)
+	type_name = serializers.SerializerMethodField()
 
 	def get_section_count(self, obj):
 		section_list = Section.objects.filter(routine=obj)
@@ -140,7 +163,10 @@ class RoutineSerializer(serializers.ModelSerializer):
 			section_count = len(section_list)
 		return section_count
 
+	def get_type_name(self, obj):
+		return obj.get_type_display()
+
 
 	class Meta:
 		model = Routine
-		fields = ('id','name','plan','type','comments','section_count')
+		fields = ('id','name','plan','type','type_name','comments','section_count')

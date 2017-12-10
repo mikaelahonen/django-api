@@ -163,8 +163,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
-	#'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
-	'DEFAULT_METADATA_CLASS': 'project.core.MinimalMetadata',
+	'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
+	#'DEFAULT_METADATA_CLASS': 'project.core.MinimalMetadata',
 }
 
 JWT_AUTH = {

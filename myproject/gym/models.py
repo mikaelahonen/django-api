@@ -100,7 +100,8 @@ class Routine(models.Model):
 		max_length = 100,
 	)
 	plan = models.ManyToManyField(
-		Plan
+		Plan,
+		blank=True,
 	)
 	type = models.CharField(
 		choices=TYPE_CHOICES,
@@ -108,7 +109,8 @@ class Routine(models.Model):
 		max_length=2,
 	)
 	comments = models.TextField(
-		default = "",
+		default="",
+		blank=True,
 	)
 	def __str__(self):
 		return self.name

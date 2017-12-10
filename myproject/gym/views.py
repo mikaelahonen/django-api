@@ -32,8 +32,14 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 		#Sort. F() allows setting nulls to last
 		queryset = queryset.order_by('-id').order_by(F("start_time").desc(nulls_last=True))
 
+		#Get workout parameter from URL
+		fields = self.request.query_params.get('fields', None)
+		field_list = None
+		if(fields is not None):
+			field_list = fields.split(",")
+
 		#many=True: get or post multiple items at once
-		serializer = WorkoutSerializer(queryset, many=True)
+		serializer = WorkoutSerializer(queryset, many=True, fields=field_list)
 		return Response(serializer.data)
 
 	#def retrieve(self, request, pk=None):
@@ -53,15 +59,13 @@ class SetViewSet(viewsets.ModelViewSet):
 		#All objects
 		queryset = Set.objects.all()
 
-		#Get workout parameter from URL
-		workout = self.request.query_params.get('workout', None)
-		excercise = self.request.query_params.get('excercise', None)
-
 		#Filter by workout parameter
+		workout = self.request.query_params.get('workout', None)
 		if(workout is not None):
 			queryset = queryset.filter(workout__id=workout)
 
 		#Filter by excercise parameter
+		excercise = self.request.query_params.get('excercise', None)
 		if(excercise is not None):
 			queryset = queryset.filter(excercise__id=excercise)
 
@@ -81,6 +85,21 @@ class ExcerciseViewSet(viewsets.ModelViewSet):
 	"""
 	queryset = Excercise.objects.all().order_by('-id')
 	serializer_class = ExcerciseSerializer
+
+	def list(self, request):
+
+		#All objects
+		queryset = Excercise.objects.all()
+
+		#Get workout parameter from URL
+		fields = self.request.query_params.get('fields', None)
+		field_list = None
+		if(fields is not None):
+			field_list = fields.split(",")
+
+		#many=True: get or post multiple items at once
+		serializer = ExcerciseSerializer(queryset, many=True, fields=field_list)
+		return Response(serializer.data)
 
 class RoutineViewSet(viewsets.ModelViewSet):
 	"""
