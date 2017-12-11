@@ -23,7 +23,7 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 	"""
 	queryset = Workout.objects.all().order_by('-id')
 	serializer_class = WorkoutSerializer
-	
+
 	def list(self, request):
 		#All objects
 		queryset = Workout.objects.all()
@@ -31,64 +31,83 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 		queryset = queryset.filter(user=self.request.user)
 		#Sort. F() allows setting nulls to last
 		queryset = queryset.order_by('-id').order_by(F("start_time").desc(nulls_last=True))
-		
+
+		#Get workout parameter from URL
+		fields = self.request.query_params.get('fields', None)
+		field_list = None
+		if(fields is not None):
+			field_list = fields.split(",")
+
 		#many=True: get or post multiple items at once
-		serializer = WorkoutSerializer(queryset, many=True)		
+		serializer = WorkoutSerializer(queryset, many=True, fields=field_list)
 		return Response(serializer.data)
-	
+
 	#def retrieve(self, request, pk=None):
 
-	
+
 class SetViewSet(viewsets.ModelViewSet):
 	"""
 	API endpoint that allows sets to be viewed or edited.
 	"""
-	
+
 	serializer_class = SetSerializer
 	queryset = Set.objects.all().order_by('workout_order')
-	
+
 	#Override the list method
 	def list(self, request):
-	
+
 		#All objects
 		queryset = Set.objects.all()
-	
-		#Get workout parameter from URL
-		workout = self.request.query_params.get('workout', None)		
-		excercise = self.request.query_params.get('excercise', None)	
-		
+
 		#Filter by workout parameter
+		workout = self.request.query_params.get('workout', None)
 		if(workout is not None):
 			queryset = queryset.filter(workout__id=workout)
-			
+
 		#Filter by excercise parameter
+		excercise = self.request.query_params.get('excercise', None)
 		if(excercise is not None):
 			queryset = queryset.filter(excercise__id=excercise)
-			
+
 		#Filter by current user
 		queryset = queryset.filter(user=self.request.user)
-		
+
 		#Sort
 		queryset = queryset.order_by('-done', 'workout_order')
-	
+
 		#many=True: get or post multiple items at once
-		serializer = SetSerializer(queryset, many=True)		
+		serializer = SetSerializer(queryset, many=True)
 		return Response(serializer.data)
-	
+
 class ExcerciseViewSet(viewsets.ModelViewSet):
 	"""
 	API endpoint that allows excercises to be viewed or edited.
 	"""
 	queryset = Excercise.objects.all().order_by('-id')
 	serializer_class = ExcerciseSerializer
-	
+
+	def list(self, request):
+
+		#All objects
+		queryset = Excercise.objects.all()
+
+		#Get workout parameter from URL
+		fields = self.request.query_params.get('fields', None)
+		field_list = None
+		if(fields is not None):
+			field_list = fields.split(",")
+
+		#many=True: get or post multiple items at once
+		serializer = ExcerciseSerializer(queryset, many=True, fields=field_list)
+		return Response(serializer.data)
+
 class RoutineViewSet(viewsets.ModelViewSet):
 	"""
 	API endpoint that allows routines to be viewed or edited.
 	"""
 	queryset = Routine.objects.all().order_by('-id')
 	serializer_class = RoutineSerializer
-	
+
 	#Route to start a Routine
 	@detail_route(methods=['post'])
 	def start(self, request, pk=None):
@@ -96,7 +115,7 @@ class RoutineViewSet(viewsets.ModelViewSet):
 		user = self.request.user
 		response = routine_start(routine, user)
 		return Response(response)
-	
+
 class MuscleGroupViewSet(viewsets.ModelViewSet):
 	"""
 	API endpoint that allows muscle groups to be viewed or edited.

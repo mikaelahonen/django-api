@@ -25,7 +25,7 @@ class MuscleGroup(models.Model):
 class Excercise(models.Model):
 	# String for random excercise
 	rndStr = "Random"
-		
+
 	excercise = models.CharField(
 		max_length=100
 	)
@@ -41,7 +41,7 @@ class Excercise(models.Model):
 		decimal_places=2,
 		null=True
 	)
-	#Portion of body mass moving in the excercise  
+	#Portion of body mass moving in the excercise
 	mass_share = models.DecimalField(
 		max_digits=5,
 		decimal_places=2,
@@ -55,14 +55,14 @@ class Excercise(models.Model):
 	description = models.TextField(
 		default = "",
 	)
-	
+
 	def __str__(self):
 		return self.excercise
-	
+
 	def get_absolute_url(self):
 		return reverse('excercise-detail', kwargs={'pk': self.pk})
-		
-# Plan is a template for program	  
+
+# Plan is a template for program
 class Plan(models.Model):
 	name = models.CharField(
 		max_length = 100
@@ -72,7 +72,7 @@ class Plan(models.Model):
 	)
 	def __str__(self):
 		return self.name
-			
+
 		return True
 		# Create program
 		# Create workout
@@ -80,27 +80,28 @@ class Plan(models.Model):
 #Routine is a template for workout
 class Routine(models.Model):
 	TYPE_CHOICES = (
-	
+
 		#Excercise First. Execute the first excercise before moving to next.
 		#This is the natural order according to the index.
 		('EF','Excercise first'),
-		
-		#Set First. Execute first set from each excercise first.		
-		('SF','Set first'), 
-		
+
+		#Set First. Execute first set from each excercise first.
+		('SF','Set first'),
+
 		#Alternate Two. Switch between two exercises.
 		#If the number of excercices is odd, one excercice will be done last.
-		('AT','Alternate two'), 
-		
+		('AT','Alternate two'),
+
 		#Random order. Generate all sets and make the order random.
 		('RO','Random order'),
-		
+
 	)
 	name = models.CharField(
 		max_length = 100,
 	)
 	plan = models.ManyToManyField(
-		Plan
+		Plan,
+		blank=True,
 	)
 	type = models.CharField(
 		choices=TYPE_CHOICES,
@@ -108,11 +109,12 @@ class Routine(models.Model):
 		max_length=2,
 	)
 	comments = models.TextField(
-		default = "",
+		default="",
+		blank=True,
 	)
 	def __str__(self):
 		return self.name
-		
+
 
 # A Section of a Routine is a building block of an routine.
 # It has to be a single excercise.
@@ -123,7 +125,7 @@ class Section(models.Model):
 		default = 1,
 	)
 	#If random is false, use this
-	#Because this is optional, on delete is SET_NULL 
+	#Because this is optional, on delete is SET_NULL
 	excercise = models.ForeignKey(
 		Excercise,
 		on_delete = models.SET_NULL,
@@ -131,7 +133,7 @@ class Section(models.Model):
 		null = True,
 	)
 	#If random is true, use this
-	#Because this is optional, on delete is SET_NULL 
+	#Because this is optional, on delete is SET_NULL
 	muscle_group = models.ForeignKey(
 		MuscleGroup,
 		on_delete = models.SET_NULL,
@@ -166,10 +168,10 @@ class Section(models.Model):
 				e = self.excercise.excercise
 			else:
 				e = ""
-				
+
 		return self.routine.name + " -- " + e
 
-		
+
 class Workout(models.Model):
 	name = models.CharField(
 		default = "Workout X",
@@ -195,10 +197,11 @@ class Workout(models.Model):
 	)
 	comments = models.TextField(
 		default = "",
+		blank = True,
 	)
 	def __str__(self):
 		return self.name
-		
+
 class Set(models.Model):
 	excercise = models.ForeignKey(
 		Excercise,
@@ -235,23 +238,19 @@ class Set(models.Model):
 		default = "",
 		blank = True,
 	)
-	
+
 	def __str__(self):
 		if(self.workout==None):
 			wo = 'Unknown Workout'
 		else:
 			wo = self.workout.name
-			
+
 		if(self.excercise==None):
 			e = 'Unknown Excercise'
 		else:
 			e = str(self.excercise.excercise)
-			
+
 		r = str(self.reps)
 		w = str(self.weight)
-		
-		return wo + ': ' + e + ' ' + r + 'x' + w
-		
 
-	
-	
+		return wo + ': ' + e + ' ' + r + 'x' + w
