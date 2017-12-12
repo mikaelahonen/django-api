@@ -23,8 +23,6 @@ class MuscleGroup(models.Model):
 
 # Excercises
 class Excercise(models.Model):
-	# String for random excercise
-	rndStr = "Random"
 
 	excercise = models.CharField(
 		max_length=100
@@ -36,16 +34,14 @@ class Excercise(models.Model):
 		null = True,
 	)
 	#Distance from movement axis in meters
-	lever = models.DecimalField(
-		max_digits=3,
-		decimal_places=2,
-		null=True
+	lever = models.FloatField(
+		null=True,
+		blank=True,
 	)
 	#Portion of body mass moving in the excercise
-	mass_share = models.DecimalField(
-		max_digits=5,
-		decimal_places=2,
-		null=True
+	mass_share = models.FloatField(
+		null=True,
+		blank=True,
 	)
 	#Isolated, Compound
 	type = models.CharField(
@@ -54,6 +50,7 @@ class Excercise(models.Model):
 	#Variations for example
 	description = models.TextField(
 		default = "",
+		blank = True,
 	)
 
 	def __str__(self):
@@ -179,9 +176,11 @@ class Workout(models.Model):
 	)
 	start_time = models.DateTimeField(
 		null = True,
+		blank = True,
 	)
 	end_time = models.DateTimeField(
 		null = True,
+		blank = True,
 	)
 	location = models.CharField(
 		default = "Gym X",
@@ -207,6 +206,7 @@ class Set(models.Model):
 		Excercise,
 		on_delete = models.SET_NULL,
 		null = True,
+		blank = True,
 	)
 	workout = models.ForeignKey(
 		Workout,
@@ -217,10 +217,12 @@ class Set(models.Model):
 	reps = models.IntegerField(
 		default = None,
 		null = True,
+		blank = True,
 	)
-	weight = models.IntegerField(
+	weight = models.FloatField(
 		default = None,
 		null = True,
+		blank = True,
 	)
 	#The oreder index of the set inside the workout
 	workout_order = models.IntegerField(

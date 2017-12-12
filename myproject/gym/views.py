@@ -72,8 +72,16 @@ class SetViewSet(viewsets.ModelViewSet):
 		#Filter by current user
 		queryset = queryset.filter(user=self.request.user)
 
-		#Sort
-		queryset = queryset.order_by('-done', 'workout_order')
+		#Order
+		order = self.request.query_params.get('order', None)
+		if(order is None):
+			queryset = queryset.order_by('-done', 'workout_order')
+		else:
+			#Optimize this to use a single order by statement
+			order_list = order.split(",")
+			for attribute in order_list:
+				queryset = queryset.order_by(attribute)
+
 
 		#many=True: get or post multiple items at once
 		serializer = SetSerializer(queryset, many=True)
@@ -90,6 +98,9 @@ class ExcerciseViewSet(viewsets.ModelViewSet):
 
 		#All objects
 		queryset = Excercise.objects.all()
+
+		#Order by excercise name
+		queryset = queryset.order_by('excercise')
 
 		#Get workout parameter from URL
 		fields = self.request.query_params.get('fields', None)
@@ -115,6 +126,27 @@ class RoutineViewSet(viewsets.ModelViewSet):
 		user = self.request.user
 		response = routine_start(routine, user)
 		return Response(response)
+
+
+class SectionViewSet(viewsets.ModelViewSet):
+	"""
+	API endpoint that allows sections to be viewed or edited.
+	"""
+	queryset = Section.objects.all().order_by('-id')
+	serializer_class = SectionSerializer
+
+	def list(self, request):
+
+		#Get queryset
+		queryset = Section.objects.all().order_by('index')
+
+		#Filter by routine parameter
+		routine = self.request.query_params.get('routine', None)
+		if(routine is not None):
+			queryset = queryset.filter(routine=routine)
+
+		serializer = SectionSerializer(queryset, many=True)
+		return Response(serializer.data)
 
 class MuscleGroupViewSet(viewsets.ModelViewSet):
 	"""

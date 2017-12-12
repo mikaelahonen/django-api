@@ -27,6 +27,7 @@ router.register(r'gym/sets', gym.views.SetViewSet)
 router.register(r'gym/excercises', gym.views.ExcerciseViewSet)
 router.register(r'gym/musclegroups', gym.views.MuscleGroupViewSet)
 router.register(r'gym/routines', gym.views.RoutineViewSet)
+router.register(r'gym/sections', gym.views.SectionViewSet)
 
 
 #Other urls
@@ -38,5 +39,3 @@ urlpatterns += [
 	url(r'^test',project.views.test),
 	url(r'^schema/$', schema_view),
 ]
-
-
