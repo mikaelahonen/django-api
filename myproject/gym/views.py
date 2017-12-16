@@ -14,7 +14,9 @@ import datetime as dt
 import json
 # Import models and forms
 from .models import *
-
+#Pandas and numpy
+import numpy as np
+import pandas as pd
 #Viewsets http://www.django-rest-framework.org/api-guide/viewsets/
 
 class WorkoutViewSet(viewsets.ModelViewSet):
@@ -58,7 +60,6 @@ class SetViewSet(viewsets.ModelViewSet):
 
 		#All objects
 		queryset = Set.objects.all()
-
 		#Filter by workout parameter
 		workout = self.request.query_params.get('workout', None)
 		if(workout is not None):
@@ -85,6 +86,39 @@ class SetViewSet(viewsets.ModelViewSet):
 
 		#many=True: get or post multiple items at once
 		serializer = SetSerializer(queryset, many=True)
+		return Response(serializer.data)
+
+	def update(self, request, pk=None):
+		context = {"request": self.request}
+
+		#Don't mutate the old instance
+		instance = self.get_object()
+		#Do mutations to new data
+		new_data = request.data
+
+		#Get old instance
+		print(str(instance.done) + "-" + str(new_data["done"]))
+
+		#If done and wasn't done
+		if(not instance.done and new_data['done']):
+			print("Done, wasn't done.")
+			sets = Set.objects.filter(workout=instance.workout).values()
+			df = pd.DataFrame(list(sets))
+			done_groups = df.groupby('done')
+			#If at least one True
+			print(list(done_groups.groups))
+			if(True in list(done_groups.groups)):
+				dones = done_groups.size()[True]
+			else:
+				dones = 0
+			new_data["workout_order"] = dones + 1
+
+			#Set index = index + 1 where index > done_count
+
+		serializer = SetSerializer(instance, data=new_data, context=context) #partial=true for patch
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+
 		return Response(serializer.data)
 
 class ExcerciseViewSet(viewsets.ModelViewSet):

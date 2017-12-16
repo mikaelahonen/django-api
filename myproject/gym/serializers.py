@@ -82,13 +82,6 @@ class SetSerializer(serializers.ModelSerializer):
 		fields = ('id','workout_order','workout','workout_date','workout_name','reps','weight','one_rep_max','done','excercise','excercise_name','muscle_group_name','user','comments') #'excercise
 		depth = 0
 
-	#Example
-	def get_excercise_id(self, obj):
-		pair = {"url":"http://asd.com"}
-		jsonStr = json.dumps(pair)
-		return obj.excercise.id
-
-
 class MuscleGroupSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = MuscleGroup
