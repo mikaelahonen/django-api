@@ -20,17 +20,20 @@ else:
 # Application definition
 
 INSTALLED_APPS = (
+	#Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #Apps
+    #My apps
     'gym',
     'project',
+	#Additional apps
 	'rest_framework',
 	'corsheaders',
+	'django_filters',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -165,6 +168,9 @@ REST_FRAMEWORK = {
     ),
 	'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
 	#'DEFAULT_METADATA_CLASS': 'project.core.MinimalMetadata',
+	'DEFAULT_FILTER_BACKENDS': (
+		'django_filters.rest_framework.DjangoFilterBackend',
+	),
 }
 
 JWT_AUTH = {

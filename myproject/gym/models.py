@@ -1,13 +1,7 @@
-#__str__()
-from django.utils.encoding import python_2_unicode_compatible
-#Create forms
-from django.forms import ModelForm
-#In django 1.10 this would be from django.urls import reverse
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
-import datetime
-import random
+from gym import managers
+from gym.functions import *
 
 # Muscle groups
 class MuscleGroup(models.Model):
@@ -55,9 +49,6 @@ class Excercise(models.Model):
 
 	def __str__(self):
 		return self.excercise
-
-	def get_absolute_url(self):
-		return reverse('excercise-detail', kwargs={'pk': self.pk})
 
 # Plan is a template for program
 class Plan(models.Model):
@@ -202,6 +193,12 @@ class Workout(models.Model):
 		return self.name
 
 class Set(models.Model):
+
+	#Default manager
+	objects = models.Manager()
+	#Custom manager
+	objects_2 = managers.SetManager()
+
 	excercise = models.ForeignKey(
 		Excercise,
 		on_delete = models.SET_NULL,
@@ -240,6 +237,12 @@ class Set(models.Model):
 		default = "",
 		blank = True,
 	)
+
+	@property
+	def one_rep_max(self):
+		orp = one_rep_max(self.reps, self.weight)
+		orp = round(orp, 1)
+		return orp
 
 	def __str__(self):
 		if(self.workout==None):

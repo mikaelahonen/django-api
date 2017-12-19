@@ -3,9 +3,13 @@ from django.db.models import F
 from django.core import serializers
 from django.contrib.auth.models import User
 #Import DRF libraries
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, list_route
 from rest_framework import viewsets
 from rest_framework.response import Response
+
+from rest_framework.filters import OrderingFilter, SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+
 #Import app specific libraries
 from gym.serializers import *
 from gym.functions import routine_start
@@ -53,40 +57,53 @@ class SetViewSet(viewsets.ModelViewSet):
 	"""
 
 	serializer_class = SetSerializer
-	queryset = Set.objects.all().order_by('workout_order')
+	queryset = Set.objects_2.all()
+
+	#filter_backends = (filters.SearchFilter,)
+	filter_backends = (
+		DjangoFilterBackend,
+		OrderingFilter,
+		SearchFilter,
+	)
+	filter_fields = ('id','workout')
+	search_fields = ('comments',)
+	ordering_fields = ('__all__')
 
 	#Override the list method
-	def list(self, request):
+	##def list(self, request):
 
 		#All objects
-		queryset = Set.objects.all()
-		#Filter by workout parameter
-		workout = self.request.query_params.get('workout', None)
-		if(workout is not None):
-			queryset = queryset.filter(workout__id=workout)
-
-		#Filter by excercise parameter
-		excercise = self.request.query_params.get('excercise', None)
-		if(excercise is not None):
-			queryset = queryset.filter(excercise__id=excercise)
+		##queryset = Set.objects_2.all()
 
 		#Filter by current user
-		queryset = queryset.filter(user=self.request.user)
+		##queryset = queryset.filter(user=self.request.user)
+
+		#Filter by workout parameter
+		#workout = self.request.query_params.get('workout', None)
+		#if(workout is not None):
+			#queryset = queryset.filter(workout_id=workout)
+
+		#Filter by excercise parameter
+		#excercise = self.request.query_params.get('excercise', None)
+		#if(excercise is not None):
+			#queryset = queryset.filter(excercise_id=excercise)
 
 		#Order
-		order = self.request.query_params.get('order', None)
-		if(order is None):
-			queryset = queryset.order_by('-done', 'workout_order')
-		else:
-			#Optimize this to use a single order by statement
-			order_list = order.split(",")
-			for attribute in order_list:
-				queryset = queryset.order_by(attribute)
+		#order = self.request.query_params.get('order', None)
 
+		#if(order is None):
+			#queryset = queryset.order_by('excercise__muscle_group__muscle_group')
+		#else:
+			#order_list = order.split(",")
+			#for attribute in order_list:
+				#queryset = queryset.order_by(attribute)
+
+		##print(queryset.values())
+		##print(queryset.query)
 
 		#many=True: get or post multiple items at once
-		serializer = SetSerializer(queryset, many=True)
-		return Response(serializer.data)
+		##serializer = SetSerializer(queryset, many=True)
+		##return Response(serializer.data)
 
 	def update(self, request, pk=None):
 		context = {"request": self.request}
@@ -101,12 +118,10 @@ class SetViewSet(viewsets.ModelViewSet):
 
 		#If done and wasn't done
 		if(not instance.done and new_data['done']):
-			print("Done, wasn't done.")
 			sets = Set.objects.filter(workout=instance.workout).values()
 			df = pd.DataFrame(list(sets))
 			done_groups = df.groupby('done')
 			#If at least one True
-			print(list(done_groups.groups))
 			if(True in list(done_groups.groups)):
 				dones = done_groups.size()[True]
 			else:
@@ -119,6 +134,18 @@ class SetViewSet(viewsets.ModelViewSet):
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
 
+		return Response(serializer.data)
+
+	@list_route()
+	def testview(self, request):
+		#All objects
+		queryset = Set.flat_table.all()
+
+		#Filter by current user
+		queryset = queryset.filter(user=self.request.user)
+
+		#many=True: get or post multiple items at once
+		serializer = SetSerializer(queryset, many=True)
 		return Response(serializer.data)
 
 class ExcerciseViewSet(viewsets.ModelViewSet):
@@ -152,6 +179,7 @@ class RoutineViewSet(viewsets.ModelViewSet):
 	"""
 	queryset = Routine.objects.all().order_by('-id')
 	serializer_class = RoutineSerializer
+
 
 	#Route to start a Routine
 	@detail_route(methods=['post'])

@@ -1,7 +1,8 @@
 from gym.models import *
 from rest_framework import serializers
 import json
-from gym.functions import *
+from gym.functions import get_prev, get_next
+from django_filters import rest_framework as filters
 
 #Relations
 #http://www.django-rest-framework.org/api-guide/relations/#serializer-relations
@@ -10,6 +11,7 @@ class MyModelSerializer(serializers.ModelSerializer):
 	A ModelSerializer that takes an additional `fields` argument that
 	controls which fields should be displayed.
 	"""
+
 
 	def __init__(self, *args, **kwargs):
 		# Don't pass the 'fields' arg up to the superclass
@@ -24,6 +26,7 @@ class MyModelSerializer(serializers.ModelSerializer):
 			existing = set(self.fields.keys())
 			for field_name in existing - allowed:
 				self.fields.pop(field_name)
+
 
 class ExcerciseSerializer(MyModelSerializer):
 
@@ -43,44 +46,33 @@ class SetSerializer(serializers.ModelSerializer):
 	#add 'excercise_obj' to fields
 
 	#Override excercise id to default excercise name
+	#workout_name = serializers.CharField(read_only=True)
+	#Field from queryset
+	orp = serializers.FloatField(read_only=True)
+	workout_name = serializers.CharField(source="workout.name", read_only=True)
+	excercise_name = serializers.CharField(source="excercise.excercise", read_only=True)
+	muscle_group = serializers.IntegerField(source="excercise.muscle_group.id", read_only=True)
+	muscle_group_name = serializers.CharField(source="excercise.muscle_group.muscle_group", read_only=True)
 
-	excercise_name = serializers.SerializerMethodField()
-	muscle_group_name = serializers.SerializerMethodField()
-	workout_name = serializers.SerializerMethodField()
-	one_rep_max = serializers.SerializerMethodField()
-	workout_date = serializers.SerializerMethodField(read_only=True)
-	user = serializers.PrimaryKeyRelatedField(
-		read_only=True,
-		default=serializers.CurrentUserDefault(),
-	)
-
-	def get_workout_name(self, obj):
-		if(obj.workout is None):
-			return None
-		else:
-			return obj.workout.name
-
-	def get_workout_date(self, obj):
-		if(obj.workout is None):
-			return None
-		else:
-			return obj.workout.start_time
-
-	def get_excercise_name(self, obj):
-		return obj.excercise.excercise
-
-	def get_muscle_group_name(self, obj):
-		return obj.excercise.muscle_group.muscle_group
-
-	def get_one_rep_max(self, obj):
-		orp = one_rep_max(obj.reps, obj.weight)
-		orp = round(orp, 1)
-		return orp
+	filter_backends = (filters.DjangoFilterBackend,)
+	filter_fields = ('workout','id',)
 
 	class Meta:
 		model = Set
-		fields = ('id','workout_order','workout','workout_date','workout_name','reps','weight','one_rep_max','done','excercise','excercise_name','muscle_group_name','user','comments') #'excercise
-		depth = 0
+		fields = (
+			'id',
+			'workout_order',
+			'reps',
+			'weight',
+			'workout',
+			'orp',
+			'workout_name',
+			'excercise',
+			'excercise_name',
+			'muscle_group',
+			'muscle_group_name',
+			'comments',
+		)
 
 class MuscleGroupSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -93,6 +85,7 @@ class WorkoutSerializer(MyModelSerializer):
 
 	#Show all details from sets as sub array
 	#sets = SetSerializer(many=True, read_only=True)
+
 
 	next_id = serializers.SerializerMethodField(read_only=True)
 	prev_id = serializers.SerializerMethodField(read_only=True)
