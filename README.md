@@ -39,6 +39,9 @@ Use `values()` to limit the columns and to get the actual values instead of obje
 ## Django Rest Framework
 [Additional field to model serializer](https://stackoverflow.com/questions/18396547/django-rest-framework-adding-additional-field-to-modelserializer)
 
+## Django practices
+* List model classes alphabetically in views, models and serializers.
+
 ## manage.py
 
 ### Database migrations

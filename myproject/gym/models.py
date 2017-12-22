@@ -67,8 +67,13 @@ class Plan(models.Model):
 
 #Routine is a template for workout
 class Routine(models.Model):
-	TYPE_CHOICES = (
 
+	#Managers
+	objects = models.Manager()
+	manager = managers.RoutineManager()
+
+	#Model
+	TYPE_CHOICES = (
 		#Excercise First. Execute the first excercise before moving to next.
 		#This is the natural order according to the index.
 		('EF','Excercise first'),
@@ -159,8 +164,13 @@ class Section(models.Model):
 
 		return self.routine.name + " -- " + e
 
-
 class Workout(models.Model):
+
+	#Mangers
+	objects = models.Manager()
+	manager = managers.WorkoutManager()
+
+	#Model
 	name = models.CharField(
 		default = "Workout X",
 		max_length = 50,
@@ -192,13 +202,14 @@ class Workout(models.Model):
 	def __str__(self):
 		return self.name
 
+
 class Set(models.Model):
 
-	#Default manager
+	#Managers
 	objects = models.Manager()
-	#Custom manager
-	objects_2 = managers.SetManager()
+	manager = managers.SetManager()
 
+	#Model
 	excercise = models.ForeignKey(
 		Excercise,
 		on_delete = models.SET_NULL,
@@ -208,7 +219,6 @@ class Set(models.Model):
 	workout = models.ForeignKey(
 		Workout,
 		on_delete = models.CASCADE, #CASCADE is good for automation
-		related_name = 'sets',
 		null = True,
 	)
 	reps = models.IntegerField(
@@ -238,11 +248,6 @@ class Set(models.Model):
 		blank = True,
 	)
 
-	@property
-	def one_rep_max(self):
-		orp = one_rep_max(self.reps, self.weight)
-		orp = round(orp, 1)
-		return orp
 
 	def __str__(self):
 		if(self.workout==None):

@@ -29,13 +29,21 @@ router.register(r'gym/musclegroups', gym.views.MuscleGroupViewSet)
 router.register(r'gym/routines', gym.views.RoutineViewSet)
 router.register(r'gym/sections', gym.views.SectionViewSet)
 
-
 #Other urls
 urlpatterns = router.urls
+
+#Administrative urls
 urlpatterns += [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 	url(r'^api-token-auth/', obtain_jwt_token),
+    #Admin panel
     url(r'^admin/', include(admin.site.urls)),
-	url(r'^test',project.views.test),
+    #Get schema for data model
 	url(r'^schema/$', schema_view),
+
+]
+
+#Urls for dimensional model
+urlpatterns += [
+    url(r'^dm/workout-excercise$', project.views.WorkoutExcerciseDM),
 ]

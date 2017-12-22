@@ -2,7 +2,6 @@ from gym.models import *
 from rest_framework import serializers
 import json
 from gym.functions import get_prev, get_next
-from django_filters import rest_framework as filters
 
 #Relations
 #http://www.django-rest-framework.org/api-guide/relations/#serializer-relations
@@ -41,21 +40,16 @@ class ExcerciseSerializer(MyModelSerializer):
 
 class SetSerializer(serializers.ModelSerializer):
 
-	#Example
-	#excercise = ExcerciseSerializer()
-	#add 'excercise_obj' to fields
-
-	#Override excercise id to default excercise name
-	#workout_name = serializers.CharField(read_only=True)
-	#Field from queryset
+	#Calculated fields
 	orp = serializers.FloatField(read_only=True)
+
+	#Related fields
 	workout_name = serializers.CharField(source="workout.name", read_only=True)
+	workout_start_time = serializers.DateTimeField(source="workout.start_time", read_only=True)
 	excercise_name = serializers.CharField(source="excercise.excercise", read_only=True)
 	muscle_group = serializers.IntegerField(source="excercise.muscle_group.id", read_only=True)
 	muscle_group_name = serializers.CharField(source="excercise.muscle_group.muscle_group", read_only=True)
 
-	filter_backends = (filters.DjangoFilterBackend,)
-	filter_fields = ('workout','id',)
 
 	class Meta:
 		model = Set
@@ -65,8 +59,10 @@ class SetSerializer(serializers.ModelSerializer):
 			'reps',
 			'weight',
 			'workout',
+			'done',
 			'orp',
 			'workout_name',
+			'workout_start_time',
 			'excercise',
 			'excercise_name',
 			'muscle_group',
@@ -83,22 +79,14 @@ class MuscleGroupSerializer(serializers.ModelSerializer):
 #Return a single workout together with all related sets
 class WorkoutSerializer(MyModelSerializer):
 
-	#Show all details from sets as sub array
-	#sets = SetSerializer(many=True, read_only=True)
-
-
+	#Calculated fields
 	next_id = serializers.SerializerMethodField(read_only=True)
 	prev_id = serializers.SerializerMethodField(read_only=True)
-	active_set = serializers.SerializerMethodField()
-	#Keep read_only=True to not require it on forms
 	sets_done = serializers.SerializerMethodField(read_only=True)
-	sets_total = serializers.SerializerMethodField(read_only=True)
-	user = serializers.PrimaryKeyRelatedField(
-		read_only=True,
-		#http://www.django-rest-framework.org/api-guide/validators/#currentuserdefault
-		default=serializers.CurrentUserDefault()
-	)
+	sets_total = serializers.IntegerField(read_only=True)
+	active_set = serializers.SerializerMethodField(read_only=True)
 
+	#Related fields
 
 	class Meta:
 		model = Workout
@@ -109,7 +97,6 @@ class WorkoutSerializer(MyModelSerializer):
 			'end_time',
 			'location',
 			'comments',
-			'user',
 			'active_set',
 			'sets_done',
 			'sets_total',
@@ -127,9 +114,9 @@ class WorkoutSerializer(MyModelSerializer):
 		sets_done = Set.objects.filter(workout=obj, done=True)
 		return len(sets_done)
 
-	def get_sets_total(self, obj):
-		sets_total = Set.objects.filter(workout=obj)
-		return len(sets_total)
+	#def get_sets_total(self, obj):
+		#sets_total = Set.objects.filter(workout=obj)
+		#return len(sets_total)
 
 	def get_active_set(self, obj):
 		#Filter to undone sets in this workout
@@ -148,16 +135,16 @@ class WorkoutSerializer(MyModelSerializer):
 
 class RoutineSerializer(serializers.ModelSerializer):
 
-	section_count = serializers.SerializerMethodField(read_only=True)
+	section_count = serializers.IntegerField(read_only=True)
 	type_name = serializers.SerializerMethodField()
 
-	def get_section_count(self, obj):
-		section_list = Section.objects.filter(routine=obj)
-		if(section_list is None):
-			section_count = 0
-		else:
-			section_count = len(section_list)
-		return section_count
+	#def get_section_count(self, obj):
+		#section_list = Section.objects.filter(routine=obj)
+		#if(section_list is None):
+			#section_count = 0
+		#else:
+			#section_count = len(section_list)
+		#return section_count
 
 	def get_type_name(self, obj):
 		return obj.get_type_display()

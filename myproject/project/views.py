@@ -15,24 +15,27 @@ from rest_framework_jwt.settings import api_settings
 from project.serializers import UserSerializer, GroupSerializer
 from project import settings
 
+#My python modules
+import project.dm as dm
+
 #Others
 import os
 import datetime as dt
 import json
 from pprint import pprint
 
-# Create your views here.
-def index(request):
-	x = 'Hello world!'
-	return HttpResponse(x)
-	
+
+def WorkoutExcerciseDM(request):
+	data = dm.workout_excercise()
+	return HttpResponse(data)
+
 class UserViewSet(viewsets.ModelViewSet):
 	"""
 	API endpoint that allows users to be viewed or edited.
 	"""
 	queryset = User.objects.all().order_by('-date_joined')
 	serializer_class = UserSerializer
-	
+
 	@list_route(methods=['get'])
 	def current(self, request):
 		token = "asd"
@@ -41,19 +44,13 @@ class UserViewSet(viewsets.ModelViewSet):
 			"firstname": request.user.first_name,
 			"lastname": request.user.last_name,
 			"email": request.user.email,
-			
+
 		}
 		return HttpResponse(json.dumps(user))
 
-
-def test(request):
-	return HttpResponse(request.META['JWT'])
-		
 class GroupViewSet(viewsets.ModelViewSet):
 	"""
 	API endpoint that allows groups to be viewed or edited.
 	"""
 	queryset = Group.objects.all()
 	serializer_class = GroupSerializer
-    
-    
