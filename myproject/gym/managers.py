@@ -29,7 +29,8 @@ class SetManager(models.Manager):
 		#Add orp field
 		queryset = queryset.annotate(
 			orm=ExpressionWrapper(
-				(36/(37-F('reps')))*F('weight'),
+				#Workaround to get decimals
+				(36*100/(37-F('reps')))*F('weight')/100,
 				#F('reps')+F('weight'),
 				output_field=models.FloatField()
 			)
