@@ -1,9 +1,47 @@
 # Import models
 from gym.models import *
+#Python modules
+import datetime as dt
 #Pandas and NumPy
 import numpy as np
 import pandas as pd
 
+def calculate_workout_set(values):
+
+	#Create measures in sets data frame
+	df_values = pd.DataFrame(list(values))
+	df_values['orm'] = (36/(37-df_values['reps'])) * df_values['weight']
+
+	#Define dimensions
+	dim = ['workout_id','excercise_id']
+	grouped = df_values.groupby(dim)
+
+	#Calculated fields
+	orm_avg = grouped['orm'].mean().round(2)
+	orm_max = grouped['orm'].max().round(2)
+	set_count = grouped.size()
+
+	#Nominal fields
+	date = grouped['workout__start_time'].first()
+	print(date)
+
+	#Combine calculated fields to data frame
+	df_workouts = pd.DataFrame({
+		'orm_avg': orm_avg,
+		'orm_max': orm_max,
+		'set_count': set_count,
+		'date': date,
+	})
+
+	#Make dimension indexes to columns
+	df_workouts = df_workouts.reset_index()
+
+	#Order by
+	df_workouts = df_workouts.sort_values(by=['date'])
+
+	#Filter
+
+	return df_workouts.to_dict(orient="record")
 
 #Creates sets from routine and returns the list of sets
 #More details about routine types in models.py file
@@ -62,7 +100,8 @@ def _create_routine_sets(workout, routine, user):
 
 def _create_routine_workout(routine, user):
 	#Create new workout
-	name = routine.name + ' - Created from routine'
+	name = routine.name + ' - Created from routine ' + str(dt.datetime.now())
+	print(name)
 	workout = Workout.objects.create(
 		name = name,
 		user = user,

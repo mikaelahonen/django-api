@@ -172,7 +172,7 @@ class Workout(models.Model):
 	#Model
 	name = models.CharField(
 		default = "Workout X",
-		max_length = 50,
+		max_length = 100,
 	)
 	start_time = models.DateTimeField(
 		null = True,
@@ -191,9 +191,6 @@ class Workout(models.Model):
 		User,
 		null=True
 	)
-	name = models.CharField(
-		max_length = 50,
-	)
 	comments = models.TextField(
 		default = "",
 		blank = True,
@@ -209,12 +206,13 @@ class Set(models.Model):
 	manager = managers.SetManager()
 
 	#Model
+	#A set must have excercise
 	excercise = models.ForeignKey(
 		Excercise,
 		on_delete = models.SET_NULL,
 		null = True,
-		blank = True,
 	)
+	#A set must have workout, but default value would require a callback function
 	workout = models.ForeignKey(
 		Workout,
 		on_delete = models.CASCADE, #CASCADE is good for automation
@@ -230,7 +228,7 @@ class Set(models.Model):
 		null = True,
 		blank = True,
 	)
-	#The oreder index of the set inside the workout
+	#The order index of the set inside the workout
 	workout_order = models.IntegerField(
 		default = None,
 		null = True,
@@ -245,6 +243,7 @@ class Set(models.Model):
 	comments = models.TextField(
 		default = "",
 		blank = True,
+		null = True,
 	)
 
 

@@ -11,7 +11,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 #Import app specific libraries
 from gym.serializers import *
-from gym.functions import routine_start
+from gym.functions import *
 from gym.models import *
 
 class ExcerciseViewSet(viewsets.ModelViewSet):
@@ -23,9 +23,9 @@ class ExcerciseViewSet(viewsets.ModelViewSet):
 
 	#Filtering
 	filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-	filter_fields = ('id','excercise')
+	filter_fields = ('id','excercise','muscle_group')
 	search_fields = ('excercise',)
-	ordering_fields = ('id','excercise')
+	ordering_fields = ('id','excercise','muscle_group')
 
 class MuscleGroupViewSet(viewsets.ModelViewSet):
 	"""
@@ -80,7 +80,7 @@ class SetViewSet(viewsets.ModelViewSet):
 	filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
 	filter_fields = ('id','workout','excercise','workout_order','workout__start_time')
 	search_fields = ('comments',)
-	ordering_fields = ('id','orp','workout','excercise','workout_order','workout__start_time')
+	ordering_fields = ('id','orm','workout','excercise','workout_order','workout__start_time')
 
 
 	def get_queryset(self):
@@ -117,3 +117,29 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
+
+	@list_route()
+	def excercises(self, request):
+		#Initial queryset
+		queryset = Set.objects.select_related('workout')
+		#Filter queryset
+		excercise = self.request.query_params.get('excercise')
+		workout = self.request.query_params.get('workout')
+		if(excercise is not None):
+			queryset = queryset.filter(excercise=excercise)
+		if(workout is not None):
+			queryset = queryset.filter(workout=workout)
+		#Evaluate queryset values
+		values = queryset.values(
+			'id',
+			'excercise_id',
+			'reps',
+			'weight',
+			'workout_id',
+			'workout__name',
+			'workout__start_time'
+		)
+		#Calculation with python
+		calculated = calculate_workout_set(values)
+		#Return results
+		return Response(calculated)

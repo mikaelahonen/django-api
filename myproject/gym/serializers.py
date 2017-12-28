@@ -41,7 +41,7 @@ class ExcerciseSerializer(MyModelSerializer):
 class SetSerializer(serializers.ModelSerializer):
 
 	#Calculated fields
-	orp = serializers.FloatField(read_only=True)
+	orm = serializers.FloatField(read_only=True)
 
 	#Related fields
 	workout_name = serializers.CharField(source="workout.name", read_only=True)
@@ -60,7 +60,7 @@ class SetSerializer(serializers.ModelSerializer):
 			'weight',
 			'workout',
 			'done',
-			'orp',
+			'orm',
 			'workout_name',
 			'workout_start_time',
 			'excercise',

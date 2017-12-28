@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import F, Count, Value, ExpressionWrapper
+from django.db.models import F, Count, Avg, Value, ExpressionWrapper
 #from gym.models import *
 
 #Pandas and NumPy
@@ -28,7 +28,7 @@ class SetManager(models.Manager):
 
 		#Add orp field
 		queryset = queryset.annotate(
-			orp=ExpressionWrapper(
+			orm=ExpressionWrapper(
 				(36/(37-F('reps')))*F('weight'),
 				#F('reps')+F('weight'),
 				output_field=models.FloatField()

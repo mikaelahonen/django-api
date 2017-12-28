@@ -61,6 +61,11 @@ Show selected migration file
 
 `python manage.py sqlmigrate gym 0001`
 
+#### Errors
+'No changes detected'
+Same field was defined twice in the model.
+Thus, the first field description was ignored.
+
 ### shell
 Handy for testing the Django object API.
 `python manage.py shell`
