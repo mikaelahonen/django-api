@@ -23,7 +23,6 @@ def calculate_workout_set(values):
 
 	#Nominal fields
 	date = grouped['workout__start_time'].first()
-	print(date)
 
 	#Combine calculated fields to data frame
 	df_workouts = pd.DataFrame({
@@ -40,6 +39,10 @@ def calculate_workout_set(values):
 	df_workouts = df_workouts.sort_values(by=['date'])
 
 	#Filter
+
+	#Replace NaN values
+	nan_fields = ['orm_avg', 'orm_max', 'date']
+	df_workouts[nan_fields] = df_workouts[nan_fields].replace({np.NaN:None})
 
 	return df_workouts.to_dict(orient="record")
 
