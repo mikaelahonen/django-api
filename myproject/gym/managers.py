@@ -30,7 +30,7 @@ class SetManager(models.Manager):
 		queryset = queryset.annotate(
 			orm=ExpressionWrapper(
 				#Workaround to get decimals
-				(36*100/(37-F('reps')))*F('weight')/100,
+				(36*1000/(37-F('reps')))*F('weight')/1000,
 				#F('reps')+F('weight'),
 				output_field=models.FloatField()
 			)
